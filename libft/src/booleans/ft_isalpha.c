@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 11:08:17 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/10 12:47:37 by jgraf            ###   ########.fr       */
+/*   Created: 2024/10/08 11:59:29 by nmonzon           #+#    #+#             */
+/*   Updated: 2024/11/25 16:43:32 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "miniRT.h"
+#include "libft.h"
 
-int	main(int ac, char **av)
+// Checks if c is within the ascii range of alphatical letters
+
+bool	ft_isalpha(int c)
 {
-	int		fd;
-	t_data	data;
-
-	if (ac > 2)
+	if (c == '\0')
+		return (0);
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
 	{
-		printf("Too many arguments, expected 1.");
 		return (1);
 	}
-	if (ac < 2)
-	{
-		printf("Too few arguments, expected 1.");
-		return (1);
-	}
-	fd = open(av[1], O_RDONLY);
-	parse_elements(&data, fd);
-	close(fd);
 	return (0);
 }

@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   miniRT.h                                           :+:      :+:    :+:   */
+/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 11:05:08 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/10 12:46:58 by jgraf            ###   ########.fr       */
+/*   Created: 2024/10/18 12:37:26 by nmonzon           #+#    #+#             */
+/*   Updated: 2024/11/25 16:43:32 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#include "libft.h"
 
-//	Libraries
-# include "../libft/include/libft.h"
-# include "structs.h"
-# include <unistd.h>
-# include <stdio.h>
-# include <fcntl.h>
+t_list	*ft_lstlast(t_list *lst)
+{
+	t_list	*last;
 
-//	Functions
-void	parse_elements(t_data *data, int fd);
-
-
-#endif
+	last = NULL;
+	if (!lst)
+		last = lst;
+	else
+	{
+		while (lst)
+		{
+			last = lst;
+			lst = lst->next;
+		}
+	}
+	return (last);
+}

@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   miniRT.h                                           :+:      :+:    :+:   */
+/*   handle_char.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/10 11:05:08 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/10 12:46:58 by jgraf            ###   ########.fr       */
+/*   Created: 2024/10/15 12:44:15 by nmonzon           #+#    #+#             */
+/*   Updated: 2024/10/17 18:06:57 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#include "ft_printf.h"
 
-//	Libraries
-# include "../libft/include/libft.h"
-# include "structs.h"
-# include <unistd.h>
-# include <stdio.h>
-# include <fcntl.h>
-
-//	Functions
-void	parse_elements(t_data *data, int fd);
-
-
-#endif
+void	handle_character(int fd, int c, int *retval)
+{
+	if (write(fd, &c, 1) == -1)
+	{
+		*retval = -1;
+		return ;
+	}
+	(*retval)++;
+}
