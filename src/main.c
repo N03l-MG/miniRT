@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include "miniRT.h"
-#include "MLX42.h"
+
+void	render_scene(t_scene_data *data);
 
 int	main(int ac, char **av)
 {
@@ -21,25 +22,26 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		handle_error(ERR_ARGS, NULL);
 	fd = open(av[1], O_RDONLY);
-	parse_elements(&data, fd);
+	//parse_elements(&data, fd);
 	close(fd);
 	render_scene(&data);
 	return (0);
 }
 
-render_scene(t_scene_data *data)
+void	render_scene(t_scene_data *data)
 {
 	t_window_data	window_data;
 
+	(void)data;
 	window_data.mlx_window = mlx_init(1080, 720, "miniRT", false);
 	if (!window_data.mlx_window)
-		error_handler(ERR_WINDOW, &window_data);
+		handle_error(ERR_WINDOW, &window_data);
 	window_data.mlx_image = mlx_new_image(window_data.mlx_window, 1080, 720);
 	if (!window_data.mlx_image)
-		error_handler(ERR_IMAGE, &window_data);
+		handle_error(ERR_IMAGE, &window_data);
 	window_data.image_data = (unsigned char *)window_data.mlx_image->pixels;
 	if (!window_data.image_data)
-		error_handler(ERR_DATA, &window_data);
+		handle_error(ERR_DATA, &window_data);
 	mlx_image_to_window(window_data.mlx_window, window_data.mlx_image, 0, 0);
 	mlx_loop(window_data.mlx_window);
 	// do stuff

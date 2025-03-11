@@ -13,6 +13,8 @@
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
+# include "../MLX42/include/MLX42/MLX42.h"
+
 typedef enum e_error
 {
 	ERR_MEMORY,

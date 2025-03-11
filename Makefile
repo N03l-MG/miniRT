@@ -10,47 +10,74 @@
 #                                                                              #
 # **************************************************************************** #
 
+################################################################################
+###############                     BUILD SETUP                  ###############
+################################################################################
+
 NAME = miniRT
-LIB = libft/libft.a
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -Iinclude
+CC = cc
+FLAGS = -Wall -Wextra -Werror -flto -Ofast -march=native -MMD -MP $(addprefix -I, $(INCLUDES))
+LDFLAGS = -flto -fsanitize=address
+LIBFT = ./libft/libft.a
+MLX = ./MLX42/build/libmlx42.a
 
-#	Colors
-GREEN = \033[0;32m
-RED = \033[0;31m
-RESET = \033[0m
+ifeq ($(shell uname), Darwin)
+	MLX_FLAGS = -ldl -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/" -pthread -lm
+else ifeq ($(shell uname), Linux)
+	MLX_FLAGS = -L./MLX42/build -lglfw -ldl -pthread -lm
+endif
 
-#	Source files
-PARSE_SRC = $(addprefix parse/, parse_main.c)
+################################################################################
+###############                     DIRECTORIES                  ###############
+################################################################################
 
-SRC = $(addprefix src/, main.c $(PARSE_SRC))
-OBJ = $(SRC:.c=.o)
+INCLUDES = ./include ./libft ./MLX42/include/MLX42
+SOURCES = ./src
+OBJECTS = _obj
 
-#	Compile
-all: $(LIB) $(NAME)
+vpath %.h $(INCLUDES)
+vpath %.c $(SOURCES)
 
-$(LIB):
+################################################################################
+###############                    SOURCE FILES                  ###############
+################################################################################
+
+SRCS = main.c parse/parse_main.c error/error_handling.c
+
+OBJ = $(addprefix $(OBJECTS)/, $(SRCS:.c=.o))
+
+################################################################################
+###############                 COMPILATION RULES                ###############
+################################################################################
+
+all: mlx_lib ft_lib $(NAME)
+
+$(NAME): $(OBJ)
+	$(CC) $(FLAGS) $^ $(LIBFT) $(MLX) $(MLX_FLAGS) -o $@
+
+$(OBJECTS)/%.o: %.c
+	@mkdir -p $(dir $@)
+	@$(CC) $(FLAGS) -c $< -o $@ $(LDFLAGS)
+
+$(OBJECTS):
+	@mkdir -p $@
+
+mlx_lib:
+	cd MLX42 && cmake -B build && make -C build -j4
+
+ft_lib:
 	$(MAKE) -C libft
 
-$(NAME): $(OBJ) $(LIB)
-	@$(CC) $(FLAGS) -o $(NAME) $(OBJ) $(LIB) -lreadline
-	@printf "$(GREEN)Successfully compiled: $(RESET)%s\n" $(NAME)
-
-$(SRC_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@printf "$(GREEN)Compiling: $(RESET)%s\n" $(notdir $<)
-	@$(CC) $(FLAGS) -c $< -o $@
-
 clean:
-	@rm -f $(OBJ)
-	@$(MAKE) -C libft clean
-	@printf "$(GREEN)Cleaned object files$(RESET)\n"
+	rm -rf $(OBJECTS)
+	$(MAKE) -C libft clean
+	cd MLX42 && rm -rf build
 
 fclean: clean
-	@rm -f $(NAME)
-	@rm libft/libft.a
-	@printf "$(GREEN)Cleaned everything$(RESET)\n"
+	rm -f $(NAME)
 
 re: fclean all
+
+-include $(OBJ:.o=.d)
 
 .PHONY: all clean fclean re

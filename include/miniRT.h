@@ -15,6 +15,7 @@
 
 //	Libraries
 # include "../libft/include/libft.h"
+# include "../MLX42/include/MLX42/MLX42.h"
 # include "structs.h"
 # include <unistd.h>
 # include <stdio.h>

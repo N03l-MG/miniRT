@@ -27,10 +27,10 @@ static char	*get_error_message(t_error error)
 
 void	handle_error(t_error error, t_window_data *window_data)
 {
-	int		status;
+	char	*message;
 
-	status = get_error_status(error);
-	ft_fprintf(2, status);
+	message = get_error_message(error);
+	ft_fprintf(2, message);
 	clean_exit(EXIT_FAILURE, window_data);
 }
 
