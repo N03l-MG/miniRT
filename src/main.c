@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:08:17 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/10 12:47:37 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/11 17:56:55 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,5 @@ int	main(int ac, char **av)
 	fd = open(av[1], O_RDONLY);
 	parse_elements(&data, fd);
 	close(fd);
-	return (0);
+	return 0;
 }
