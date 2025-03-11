@@ -3,15 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 12:30:38 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/10 13:02:22 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/11 18:30:59 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+typedef enum e_error
+{
+	ERR_MEMORY,
+	ERR_ARGS,
+	ERR_WINDOW,
+	ERR_IMAGE,
+	ERR_DATA
+}	t_error;
+
+typedef struct s_window_data
+{
+	mlx_t			*mlx_window;
+	mlx_image_t		*mlx_image;
+	unsigned char	*image_data;
+}	t_window_data;
 
 //	Visual element structs
 typedef struct s_ambient
@@ -91,7 +107,7 @@ typedef struct s_cylinder
 
 
 //	Data struct
-typedef struct s_data
+typedef struct s_scene_data
 {
 	t_ambient	ambient;
 	t_camera	cam;
@@ -99,6 +115,6 @@ typedef struct s_data
 	t_sphere	*shpere;
 	t_plane		*plane;
 	t_cylinder	*cylinder;
-}				t_data;
+}				t_scene_data;
 
 #endif
