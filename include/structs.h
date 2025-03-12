@@ -42,6 +42,7 @@ typedef struct s_window_data
 
 typedef struct s_asset_node
 {
+	t_asset_type	type;
 	void			*asset_struct;
 	struct s_asset	*next;
 }	t_asset_node;
@@ -55,8 +56,8 @@ typedef struct s_assets
 
 typedef struct s_scene_data
 {
-	t_ambient	ambient;
-	t_camera	cam;
+	t_ambient	*ambient;
+	t_camera	*cam;
 	t_assets	*assets;
 }				t_scene_data;
 
