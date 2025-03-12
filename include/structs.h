@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 12:30:38 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/11 18:30:59 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/12 15:07:36 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define STRUCTS_H
 
 # include "../MLX42/include/MLX42/MLX42.h"
+# include "assets.h"
 
 typedef enum e_error
 {
@@ -24,6 +25,14 @@ typedef enum e_error
 	ERR_DATA
 }	t_error;
 
+typedef enum e_asset_type
+{
+	ASS_LIGHT,
+	ASS_PLANE,
+	ASS_SPHERE,
+	ASS_CYLINDER
+}	t_asset_type;
+
 typedef struct s_window_data
 {
 	mlx_t			*mlx_window;
@@ -31,92 +40,24 @@ typedef struct s_window_data
 	unsigned char	*image_data;
 }	t_window_data;
 
-//	Visual element structs
-typedef struct s_ambient
+typedef struct s_asset_node
 {
+	void			*asset_struct;
+	struct s_asset	*next;
+}	t_asset_node;
 
-
-
-	
-	int	ratio;
-	int	r;
-	int	g;
-	int	b;
-}		t_ambient;
-
-typedef struct s_camera
+typedef struct s_assets
 {
-	int	x;
-	int	y;
-	int	z;
-	int	vx;
-	int	vy;
-	int	vz;
-	int	fov;
-}		t_camera;
+	t_asset_node	*head;
+	t_asset_node	*tail;
+	size_t			size;
+}	t_assets;
 
-typedef struct s_light
-{
-	int	x;
-	int	y;
-	int	z;
-	int	brightness;
-}		t_light;
-
-
-//	Physical element structs
-typedef struct s_sphere
-{
-	struct s_sphere	*next;
-	int				x;
-	int				y;
-	int				z;
-	int				d;
-	int				r;
-	int				g;
-	int				b;
-}					t_sphere;
-
-typedef struct s_plane
-{
-	struct s_plane	*next;
-	int				x;
-	int				y;
-	int				z;
-	int				vx;
-	int				vy;
-	int				vz;
-	int				r;
-	int				g;
-	int				b;
-}					t_plane;
-
-typedef struct s_cylinder
-{
-	struct s_cylinder	*next;
-	int					x;
-	int					y;
-	int					z;
-	int					vx;
-	int					vy;
-	int					vz;
-	int					d;
-	int					h;
-	int					r;
-	int					g;
-	int					b;
-}						t_cylinder;
-
-
-//	Data struct
 typedef struct s_scene_data
 {
 	t_ambient	ambient;
 	t_camera	cam;
-	t_light		light;
-	t_sphere	*shpere;
-	t_plane		*plane;
-	t_cylinder	*cylinder;
+	t_assets	*assets;
 }				t_scene_data;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:26:09 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/11 18:48:15 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/12 15:23:23 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,19 @@ void	handle_error(t_error error, t_window_data *window_data)
 	char	*message;
 
 	message = get_error_message(error);
-	ft_fprintf(2, message);
+	ft_fprintf(2, "%s\n", message);
 	clean_exit(EXIT_FAILURE, window_data);
 }
 
 void	clean_exit(int status, t_window_data *window_data)
 {
-	if (window_data->mlx_image)
-		mlx_delete_image(window_data->mlx_window, window_data->mlx_image);
-	if (window_data->mlx_window)
-		mlx_terminate(window_data->mlx_window);
+	if (window_data)
+	{
+		if (window_data->mlx_image)
+			mlx_delete_image(window_data->mlx_window, window_data->mlx_image);
+		if (window_data->mlx_window)
+			mlx_terminate(window_data->mlx_window);
+	}
 	//gc_collect();
 	exit(status);
 }

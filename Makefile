@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+         #
+#    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/08 08:59:28 by jgraf             #+#    #+#              #
-#    Updated: 2025/03/10 11:19:30 by jgraf            ###   ########.fr        #
+#    Updated: 2025/03/12 15:18:28 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@
 NAME = miniRT
 CC = cc
 FLAGS = -Wall -Wextra -Werror -flto -Ofast -march=native -MMD -MP $(addprefix -I, $(INCLUDES))
-LDFLAGS = -flto -fsanitize=address
+LDFLAGS = -flto #-fsanitize=address
 LIBFT = ./libft/libft.a
 MLX = ./MLX42/build/libmlx42.a
 

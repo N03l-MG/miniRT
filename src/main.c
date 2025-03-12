@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:08:17 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/11 18:50:56 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/12 15:15:58 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int ac, char **av)
 	if (ac != 2)
 		handle_error(ERR_ARGS, NULL);
 	fd = open(av[1], O_RDONLY);
-	//parse_elements(&data, fd);
+	parse_elements(&data, fd);
 	close(fd);
 	render_scene(&data);
 	return (0);
@@ -33,10 +33,10 @@ void	render_scene(t_scene_data *data)
 	t_window_data	window_data;
 
 	(void)data;
-	window_data.mlx_window = mlx_init(1080, 720, "miniRT", false);
+	window_data.mlx_window = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 	if (!window_data.mlx_window)
 		handle_error(ERR_WINDOW, &window_data);
-	window_data.mlx_image = mlx_new_image(window_data.mlx_window, 1080, 720);
+	window_data.mlx_image = mlx_new_image(window_data.mlx_window, WIDTH, HEIGHT);
 	if (!window_data.mlx_image)
 		handle_error(ERR_IMAGE, &window_data);
 	window_data.image_data = (unsigned char *)window_data.mlx_image->pixels;
