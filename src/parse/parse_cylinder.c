@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cylinder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/12 17:12:48 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 17:56:19 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 *	When there is an invalid number of splits for the corresponding section
 *	or any values are out of the allowed range,
 *	a warning is thrown as the cylinder can't be constructed.
-*	The program will simply irgnore this object and it will not be rendered.
+*	The program will simply ignore this object and it will not be rendered.
 */
 
 static bool	check_valid(t_cylinder *cylinder)
@@ -29,10 +29,7 @@ static bool	check_valid(t_cylinder *cylinder)
 		|| (cylinder->b < 0 || cylinder->b > 255)
 		|| (cylinder->d < 0)
 		|| (cylinder->h < 0))
-	{
-		error("Warning! Parameters out of bounds for a Cylinder\n");
-		return (false);
-	}
+		return (printlog(WARNING, "Invalid cylinder object parameters"), false);
 	return (true);
 }
 
@@ -43,7 +40,7 @@ static void	add_cylinder(t_assets *assets, t_cylinder *new_cylinder)
 
 	if (!check_valid(new_cylinder))
 		return ;
-	new_node = malloc(sizeof(t_asset_node));
+	new_node = gc_malloc(sizeof(t_asset_node));
 	new_node->asset_struct = new_cylinder;
 	new_node->type = ASS_CYLINDER;
 	new_node->next = NULL;
@@ -57,6 +54,7 @@ static void	add_cylinder(t_assets *assets, t_cylinder *new_cylinder)
 		current->next = new_node;
 	}
 	assets->size ++;
+	assets->cylinder_cnt ++;
 }
 
 static void	set_params(t_cylinder *cylinder, char **param)
@@ -79,14 +77,14 @@ int	parse_cylinder(t_scene_data *data, char **param)
 	t_cylinder	*new_cylinder;
 
 	if (get_number_of_split_elements(param) != 6)
-		return (error("Warning! Invalid config for a Cylinder object\n"), 0);
+		return (printlog(WARNING, "Invalid cylinder configuration."), 0);
 	if (get_number_of_splits(param[1], ',') != 3)
-		return (error("Warning! Invalid position for a Cylinder object\n"), 0);
+		return (printlog(WARNING, "Invalid cylinder object position."), 0);
 	if (get_number_of_splits(param[2], ',') != 3)
-		return (error("Warning! Invalid vector for a Cylinder object\n"), 0);
-	if (get_number_of_splits(param[5], ',') != 3)
-		return (error("Warning! Invalid color for a Cylinder object\n"), 0);
-	new_cylinder = malloc(sizeof(t_cylinder));
+		return (printlog(WARNING, "Invalid cylinder object vector."), 0);
+	if (get_number_of_splits(param[3], ',') != 3)
+		return (printlog(WARNING, "Invalid cylinder color."), 0);
+	new_cylinder = gc_malloc(sizeof(t_cylinder));
 	set_params(new_cylinder, param);
 	add_cylinder(data->assets, new_cylinder);
 	return (1);

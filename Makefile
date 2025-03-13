@@ -6,7 +6,7 @@
 #    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/08 08:59:28 by jgraf             #+#    #+#              #
-#    Updated: 2025/03/12 15:18:28 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/03/13 17:49:02 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,10 @@ vpath %.c $(SOURCES)
 ###############                    SOURCE FILES                  ###############
 ################################################################################
 
-SRCS = main.c parse/parse_main.c error/error_handling.c
+SRCS = main.c \
+	   parse/parse_main.c parse/parse_light.c parse/parse_plane.c parse/parse_sphere.c parse/parse_cylinder.c parse/parse_utils.c \
+	   maintainance/logging.c maintainance/error.c \
+	   render/render_scene.c
 
 OBJ = $(addprefix $(OBJECTS)/, $(SRCS:.c=.o))
 

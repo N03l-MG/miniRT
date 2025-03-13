@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 12:30:38 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/12 15:07:36 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/13 17:13:06 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,24 @@
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "assets.h"
 
+typedef enum e_log_type
+{
+	LOG,
+	WARNING
+}	t_log_type;
+
 typedef enum e_error
 {
 	ERR_MEMORY,
 	ERR_ARGS,
+	ERR_FILE,
 	ERR_WINDOW,
 	ERR_IMAGE,
-	ERR_DATA
+	ERR_DATA,
+	ERR_AMBIENT,
+	ERR_CAM,
+	ERR_LIGHT,
+	ERR_UNKNOWN
 }	t_error;
 
 typedef enum e_asset_type
@@ -42,23 +53,28 @@ typedef struct s_window_data
 
 typedef struct s_asset_node
 {
-	t_asset_type	type;
-	void			*asset_struct;
-	struct s_asset	*next;
+	void				*asset_struct;
+	t_asset_type		type;
+	struct s_asset_node	*next;
 }	t_asset_node;
 
 typedef struct s_assets
 {
 	t_asset_node	*head;
-	t_asset_node	*tail;
 	size_t			size;
+	size_t			light_cnt;
+	size_t			sphere_cnt;
+	size_t			plane_cnt;
+	size_t			cylinder_cnt;
 }	t_assets;
 
 typedef struct s_scene_data
 {
-	t_ambient	*ambient;
-	t_camera	*cam;
-	t_assets	*assets;
+	t_window_data	*window_data;
+	t_ambient		*ambient;
+	t_camera		*cam;
+	t_assets		*assets;
 }				t_scene_data;
+
 
 #endif

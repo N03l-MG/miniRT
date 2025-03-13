@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   parse_light.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/12 17:13:03 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 17:55:27 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-/*	This is were we parse the input for the Light.
-*	When there is an invalid number of splits for the corresponding section,
-*	a fatal error is thrown as the light can't be constructed, but the
-*	program needs a properly constructed light.
+/*	This is were we parse the input for Lights.
+*	When there is an invalid number of splits for the corresponding section
+*	or any values are out of the allowed range,
+*	a warning is thrown as the light can't be constructed.
+*	The program will simply ignore this object and it will not be rendered.
 */
 
 static bool	check_valid(t_light *light)
@@ -24,10 +25,7 @@ static bool	check_valid(t_light *light)
 		|| (light->g < 0 || light->g > 255)
 		|| (light->b < 0 || light->b > 255)
 		|| (light->brightness < 0 || light->brightness > 1))
-	{
-		printf("Warning! Parameters out of bounds for a Light\n");
-		return (false);
-	}
+		return (printlog(WARNING, "Invalid light object parameters"), false);
 	return (true);
 }
 
@@ -38,7 +36,7 @@ static void	add_light(t_assets *assets, t_light *new_light)
 
 	if (!check_valid(new_light))
 		return ;
-	new_node = malloc(sizeof(t_asset_node));
+	new_node = gc_malloc(sizeof(t_asset_node));
 	new_node->asset_struct = new_light;
 	new_node->type = ASS_LIGHT;
 	new_node->next = NULL;
@@ -51,7 +49,8 @@ static void	add_light(t_assets *assets, t_light *new_light)
 			current = current->next;
 		current->next = new_node;
 	}
-	assets->size ++;
+	assets->size++;
+	assets->light_cnt++;
 }
 
 static void	set_params(t_light *light, char **param)
@@ -70,12 +69,12 @@ int	parse_light(t_scene_data *data, char **param)
 	t_light	*new_light;
 
 	if (get_number_of_split_elements(param) != 4)
-		return (error("Warning! Invalid config for a Light\n"), 0);
+		return (printlog(WARNING, "Invalid light configuration."), 0);
 	if (get_number_of_splits(param[1], ',') != 3)
-		return (error("Warning! Invalid position for a Light object\n"), 0);
+		return (printlog(WARNING, "Invalid light object position."), 0);
 	if (get_number_of_splits(param[3], ',') != 3)
-		return (error("Warning! Invalid color for a Light object\n"), 0);
-	new_light = malloc(sizeof(t_light));
+		return (printlog(WARNING, "Invalid light color."), 0);
+	new_light = gc_malloc(sizeof(t_light));
 	set_params(new_light, param);
 	add_light(data->assets, new_light);
 	return (1);

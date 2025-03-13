@@ -6,15 +6,15 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:45:39 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/12 14:34:50 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 08:25:24 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 /*	These are the parsing utils. These are used to check the number of splits
-*	possible for each section of the input (123,321,52 -> 3 split values for a ','
-*	delimiter).
+*	possible for each section of the input (123,321,52 -> 3 split values for
+*	a ',' delimiter).
 */
 
 void	free_split(char **splt)
@@ -35,7 +35,7 @@ int	get_number_of_split_elements(char **element)
 	int	i;
 
 	i = 0;
-	while(element[i])
+	while (element[i])
 		i ++;
 	return (i);
 }

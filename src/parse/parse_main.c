@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:49:10 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/12 17:47:36 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 17:54:43 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@
 static void	check_valid(t_scene_data *data)
 {
 	if (data->ambient == NULL)
-		error_fatal("Error! The scene MUST contain Ambient Light!\n");
+		fatal_error(ERR_AMBIENT, NULL);
 	else if (data->cam == NULL)
-		error_fatal("Error! The scene MUST contain a Camera!\n");
+		fatal_error(ERR_CAM, NULL);
+	else if (data->assets->light_cnt > 1)
+		fatal_error(ERR_LIGHT, NULL);
 }
 
 static void	call_element(t_scene_data *data, char *line)
@@ -34,19 +36,34 @@ static void	call_element(t_scene_data *data, char *line)
 	if (get_number_of_splits(line, ' ') < 1)
 		return ;
 	param = ft_split(line, ' ');
-	if (ft_strncmp(param[0], "A", 1) == 0)
+	if (!ft_strcmp(param[0], "A"))
 		parse_ambience(data, param);
-	else if (ft_strncmp(param[0], "C", 1) == 0)
+	else if (!ft_strcmp(param[0], "C"))
 		parse_camera(data, param);
-	else if (ft_strncmp(param[0], "L", 1) == 0)
+	else if (!ft_strcmp(param[0], "L"))
 		parse_light(data, param);
-	else if (ft_strncmp(param[0], "sp", 2) == 0)
+	else if (!ft_strcmp(param[0], "sp"))
 		parse_sphere(data, param);
-	else if (ft_strncmp(param[0], "cy", 2) == 0)
+	else if (!ft_strcmp(param[0], "cy"))
 		parse_cylinder(data, param);
-	else if (ft_strncmp(param[0], "pl", 2) == 0)
+	else if (!ft_strcmp(param[0], "pl"))
 		parse_plane(data, param);
+	else
+		error(ERR_UNKNOWN, param[0], NULL);
 	free_split(param);
+}
+
+static void	scene_init(t_scene_data *data)
+{
+	data->ambient = NULL;
+	data->cam = NULL;
+	data->assets = gc_malloc(sizeof(t_assets));
+	data->assets->head = NULL;
+	data->assets->size = 0;
+	data->assets->light_cnt = 0;
+	data->assets->sphere_cnt = 0;
+	data->assets->plane_cnt = 0;
+	data->assets->cylinder_cnt = 0;
 }
 
 void	parse_elements(t_scene_data *data, int fd)
@@ -55,11 +72,7 @@ void	parse_elements(t_scene_data *data, int fd)
 	char	*trimmed;
 
 	line = get_next_line(fd);
-	data->ambient = NULL;
-	data->cam = NULL;
-	data->assets = malloc(sizeof(t_assets));
-	data->assets->head = NULL;
-	data->assets->size = 0;
+	scene_init(data);
 	while (line)
 	{
 		trimmed = ft_strtrim(line, "\n");

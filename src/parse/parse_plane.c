@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_plane.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/12 17:13:13 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 17:55:49 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 *	When there is an invalid number of splits for the corresponding section
 *	or any values are out of the allowed range,
 *	a warning is thrown as the plane can't be constructed.
-*	The program will simply irgnore this object and it will not be rendered.
+*	The program will simply ignore this object and it will not be rendered.
 */
 
 static bool	check_valid(t_plane *plane)
@@ -27,10 +27,7 @@ static bool	check_valid(t_plane *plane)
 		|| (plane->r < 0 || plane->r > 255)
 		|| (plane->g < 0 || plane->g > 255)
 		|| (plane->b < 0 || plane->b > 255))
-	{
-		printf("Warning! Parameters out of bounds for a Plane\n");
-		return (false);
-	}
+		return (printlog(WARNING, "Invalid plane object parameters"), false);
 	return (true);
 }
 
@@ -41,7 +38,7 @@ static void	add_plane(t_assets *assets, t_plane *new_plane)
 
 	if (!check_valid(new_plane))
 		return ;
-	new_node = malloc(sizeof(t_asset_node));
+	new_node = gc_malloc(sizeof(t_asset_node));
 	new_node->asset_struct = new_plane;
 	new_node->type = ASS_PLANE;
 	new_node->next = NULL;
@@ -54,7 +51,8 @@ static void	add_plane(t_assets *assets, t_plane *new_plane)
 			current = current->next;
 		current->next = new_node;
 	}
-	assets->size ++;
+	assets->size++;
+	assets->plane_cnt++;
 }
 
 static void	set_params(t_plane *plane, char **param)
@@ -75,14 +73,14 @@ int	parse_plane(t_scene_data *data, char **param)
 	t_plane	*new_plane;
 
 	if (get_number_of_split_elements(param) != 4)
-		return (error("Warning! Invalid config for a Plane object\n"), 0);
+		return (printlog(WARNING, "Invalid plane configuration."), 0);
 	if (get_number_of_splits(param[1], ',') != 3)
-		return (error("Warning! Invalid position for a Plane object\n"), 0);
+		return (printlog(WARNING, "Invalid plane object position."), 0);
 	if (get_number_of_splits(param[2], ',') != 3)
-		return (error("Warning! Invalid vector for a Plane object\n"), 0);
+		return (printlog(WARNING, "Invalid plane object vector."), 0);
 	if (get_number_of_splits(param[3], ',') != 3)
-		return (error("Warning! Invalid color for a Plane object\n"), 0);
-	new_plane = malloc(sizeof(t_plane));
+		return (printlog(WARNING, "Invalid plane color."), 0);
+	new_plane = gc_malloc(sizeof(t_plane));
 	set_params(new_plane, param);
 	add_plane(data->assets, new_plane);
 	return (1);
