@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:05:08 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/13 18:33:13 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/13 19:28:45 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	render_scene(t_scene_data *data);
 void	printlog(t_log_type log_type, char *message);
 
 //	Error Management
-void	error(t_error error, char *context, t_window_data *window_data);
+void	error(t_error error, char *context);
 void	fatal_error(t_error error, t_window_data *window_data);
 void	clean_exit(int status, t_window_data *window_data);
 

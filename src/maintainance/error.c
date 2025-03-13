@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:26:09 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/13 17:51:36 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/13 19:28:38 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*get_error_message(t_error error)
 	return (messages[error]);
 }
 
-void	error(t_error error, char *context, t_window_data *window_data)
+void	error(t_error error, char *context)
 {
 	char	*message;
 

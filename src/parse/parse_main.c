@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:49:10 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/13 17:54:43 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/13 19:29:09 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	call_element(t_scene_data *data, char *line)
 	else if (!ft_strcmp(param[0], "pl"))
 		parse_plane(data, param);
 	else
-		error(ERR_UNKNOWN, param[0], NULL);
+		error(ERR_UNKNOWN, param[0]);
 	free_split(param);
 }
 
