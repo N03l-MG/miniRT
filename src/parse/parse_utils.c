@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:45:39 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/14 08:27:44 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 08:25:24 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void	free_split(char **splt)
 	i = 0;
 	while (splt[i])
 	{
-		gc_free(splt[i]);
+		free(splt[i]);
 		i ++;
 	}
-	gc_free(splt);
+	free(splt);
 }
 
 int	get_number_of_split_elements(char **element)

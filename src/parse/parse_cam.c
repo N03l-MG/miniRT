@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cam.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/14 08:14:22 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 17:57:52 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,11 @@ void	parse_camera(t_scene_data *data, char **param)
 	if (get_number_of_split_elements(param) != 4)
 		fatal_error(ERR_DATA, NULL);
 	if (data->cam == NULL)
-		data->cam = gc_malloc(sizeof(t_camera));
+		data->cam = malloc(sizeof(t_camera));
 	if (get_number_of_splits(param[1], ',') != 3)
 		fatal_error(ERR_DATA, NULL);
 	if (get_number_of_splits(param[2], ',') != 3)
 		fatal_error(ERR_DATA, NULL);
 	set_params(data->cam, param);
 	check_valid(data);
-	printlog(LOG, "Camera setup successful.");
 }

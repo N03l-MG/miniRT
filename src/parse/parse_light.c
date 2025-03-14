@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_light.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/14 08:15:45 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 17:55:27 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static void	add_light(t_assets *assets, t_light *new_light)
 	}
 	assets->size++;
 	assets->light_cnt++;
-	printlog(LOG, "Light object setup successful.");
 }
 
 static void	set_params(t_light *light, char **param)

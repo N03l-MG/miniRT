@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_scene.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:45:06 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/14 13:03:41 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 17:49:05 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,22 @@ static void	draw_on_image(t_scene_data *data, mlx_image_t *img)
 {
 	int			i;
 	int			j;
-	uint32_t	basecol = col_rgb(data->ambient->r, data->ambient->g, data->ambient->b, 0xFF);
-	uint32_t	col = basecol;
+	uint32_t	col = col_rgb(data->ambient->r, data->ambient->g, data->ambient->b, 0xFF);
 
 	i = 0;
-	while (i < WIDTH)
+	while (i < 1280)
 	{
 		j = 0;
-		while (j < HEIGHT)
+		while (j < 720)
 		{
-			if (i % 6 == 0)
-			{
-				if (j % 6 == 0)
-					col = col_rgb(get_r(basecol), 0, 0, 0xFF);
-				if (j % 12 == 0)
-					col = col_rgb(0, get_g(basecol), 0, 0xFF);
-				if (j % 18 == 0)
-					col = col_rgb(0, 0, get_b(basecol), 0xFF);
-			}
+			if ((j % 20) == 0)
+				col = col_rgb(data->ambient->r, data->ambient->g, data->ambient->b, 0xFF);
 			mlx_put_pixel(img, i, j, col);
 			j ++;
 		}
 		i ++;
 	}
+	printf("R: %i\nG: %i\nB: %i\n", get_r(col), get_g(col), get_b(col));
 }
 
 void	render_scene(t_scene_data *data)
@@ -46,10 +39,10 @@ void	render_scene(t_scene_data *data)
 	t_window_data	window_data;
 
 	(void)data;
-	window_data.mlx_window = mlx_init(WIDTH, HEIGHT, "miniRT", false);
+	window_data.mlx_window = mlx_init(1280, 720, "miniRT", false);
 	if (!window_data.mlx_window)
 		fatal_error(ERR_WINDOW, &window_data);
-	window_data.mlx_image = mlx_new_image(window_data.mlx_window, WIDTH, HEIGHT);
+	window_data.mlx_image = mlx_new_image(window_data.mlx_window, 1280, 720);
 	if (!window_data.mlx_image)
 		fatal_error(ERR_IMAGE, &window_data);
 	window_data.image_data = (unsigned char *)window_data.mlx_image->pixels;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:43:08 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/14 08:42:29 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 17:43:32 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,5 @@ void	clean_exit(int status, t_window_data *window_data)
 			mlx_terminate(window_data->mlx_window);
 	}
 	gc_collect();
-	system("leaks miniRT");
 	exit(status);
 }

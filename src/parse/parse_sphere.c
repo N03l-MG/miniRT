@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_sphere.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/14 08:15:43 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/13 17:55:59 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ static void	add_sphere(t_assets *assets, t_sphere *new_sphere)
 	}
 	assets->size ++;
 	assets->sphere_cnt ++;
-	printlog(LOG, "Sphere object setup successful.");
 }
 
 static void	set_params(t_sphere *sphere, char **param)
