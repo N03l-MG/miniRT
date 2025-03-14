@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:05:08 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/13 19:28:45 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/14 17:43:25 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include "../libft/include/libft.h"
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "structs.h"
+# include "maths.h"
 
 //	Defines
 # define WIDTH 1080
@@ -46,6 +47,11 @@ int			get_b(uint32_t rgb);
 
 //	Rendering
 void	render_scene(t_scene_data *data);
+t_ray   camera_ray_for_pixel(t_camera *cam, float px, float py);
+void    camera_setup(t_camera *cam);
+
+// Shapes
+int		sphere_intersect(t_sphere *sphere, t_ray ray, double *t);
 
 //	Logging
 void	printlog(t_log_type log_type, char *message);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cylinder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/13 17:56:19 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/14 14:16:59 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@
 
 static bool	check_valid(t_cylinder *cylinder)
 {
-	if ((cylinder->vx < -1 || cylinder->vx > 1)
-		|| (cylinder->vy < -1 || cylinder->vy > 1)
-		|| (cylinder->vz < -1 || cylinder->vz > 1)
-		|| (cylinder->r < 0 || cylinder->r > 255)
-		|| (cylinder->g < 0 || cylinder->g > 255)
-		|| (cylinder->b < 0 || cylinder->b > 255)
-		|| (cylinder->d < 0)
-		|| (cylinder->h < 0))
+	if ((cylinder->vec_x < -1 || cylinder->vec_x > 1)
+		|| (cylinder->vec_y < -1 || cylinder->vec_y > 1)
+		|| (cylinder->vec_z < -1 || cylinder->vec_z > 1)
+		|| (cylinder->col_r < 0 || cylinder->col_r > 255)
+		|| (cylinder->col_g < 0 || cylinder->col_g > 255)
+		|| (cylinder->col_b < 0 || cylinder->col_b > 255)
+		|| (cylinder->diameter < 0)
+		|| (cylinder->height < 0))
 		return (printlog(WARNING, "Invalid cylinder object parameters"), false);
 	return (true);
 }
@@ -55,21 +55,22 @@ static void	add_cylinder(t_assets *assets, t_cylinder *new_cylinder)
 	}
 	assets->size ++;
 	assets->cylinder_cnt ++;
+	printlog(LOG, "Cylinder object setup successful.");
 }
 
 static void	set_params(t_cylinder *cylinder, char **param)
 {
-	cylinder->x = ft_atof(get_split_param(param[1], 0));
-	cylinder->y = ft_atof(get_split_param(param[1], 1));
-	cylinder->z = ft_atof(get_split_param(param[1], 2));
-	cylinder->vx = ft_atof(get_split_param(param[2], 0));
-	cylinder->vy = ft_atof(get_split_param(param[2], 1));
-	cylinder->vz = ft_atof(get_split_param(param[2], 2));
-	cylinder->d = ft_atof(param[3]);
-	cylinder->h = ft_atof(param[4]);
-	cylinder->r = ft_atoi(get_split_param(param[5], 0));
-	cylinder->g = ft_atoi(get_split_param(param[5], 1));
-	cylinder->b = ft_atoi(get_split_param(param[5], 2));
+	cylinder->pos_x = ft_atof(get_split_param(param[1], 0));
+	cylinder->pos_y = ft_atof(get_split_param(param[1], 1));
+	cylinder->pos_z = ft_atof(get_split_param(param[1], 2));
+	cylinder->vec_x = ft_atof(get_split_param(param[2], 0));
+	cylinder->vec_y = ft_atof(get_split_param(param[2], 1));
+	cylinder->vec_z = ft_atof(get_split_param(param[2], 2));
+	cylinder->diameter = ft_atof(param[3]);
+	cylinder->height = ft_atof(param[4]);
+	cylinder->col_r = ft_atoi(get_split_param(param[5], 0));
+	cylinder->col_g = ft_atoi(get_split_param(param[5], 1));
+	cylinder->col_b = ft_atoi(get_split_param(param[5], 2));
 }
 
 int	parse_cylinder(t_scene_data *data, char **param)
@@ -82,7 +83,7 @@ int	parse_cylinder(t_scene_data *data, char **param)
 		return (printlog(WARNING, "Invalid cylinder object position."), 0);
 	if (get_number_of_splits(param[2], ',') != 3)
 		return (printlog(WARNING, "Invalid cylinder object vector."), 0);
-	if (get_number_of_splits(param[3], ',') != 3)
+	if (get_number_of_splits(param[5], ',') != 3)
 		return (printlog(WARNING, "Invalid cylinder color."), 0);
 	new_cylinder = gc_malloc(sizeof(t_cylinder));
 	set_params(new_cylinder, param);

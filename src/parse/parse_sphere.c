@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_sphere.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/13 17:55:59 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/14 14:19:42 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 
 static bool	check_valid(t_sphere *sphere)
 {
-	if ((sphere->r < 0 || sphere->r > 255)
-		|| (sphere->g < 0 || sphere->g > 255)
-		|| (sphere->b < 0 || sphere->b > 255)
-		|| (sphere->d < 0))
+	if ((sphere->col_r < 0 || sphere->col_r > 255)
+		|| (sphere->col_g < 0 || sphere->col_g > 255)
+		|| (sphere->col_b < 0 || sphere->col_b > 255)
+		|| (sphere->diameter < 0))
 		return (printlog(WARNING, "Invalid sphere object parameters"), false);
 	return (true);
 }
@@ -51,17 +51,18 @@ static void	add_sphere(t_assets *assets, t_sphere *new_sphere)
 	}
 	assets->size ++;
 	assets->sphere_cnt ++;
+	printlog(LOG, "Sphere object setup successful.");
 }
 
 static void	set_params(t_sphere *sphere, char **param)
 {
-	sphere->x = ft_atof(get_split_param(param[1], 0));
-	sphere->y = ft_atof(get_split_param(param[1], 1));
-	sphere->z = ft_atof(get_split_param(param[1], 2));
-	sphere->d = ft_atof(param[2]);
-	sphere->r = ft_atoi(get_split_param(param[3], 0));
-	sphere->g = ft_atoi(get_split_param(param[3], 1));
-	sphere->b = ft_atoi(get_split_param(param[3], 2));
+	sphere->pos_x = ft_atof(get_split_param(param[1], 0));
+	sphere->pos_y = ft_atof(get_split_param(param[1], 1));
+	sphere->pos_z = ft_atof(get_split_param(param[1], 2));
+	sphere->diameter = ft_atof(param[2]);
+	sphere->col_r = ft_atoi(get_split_param(param[3], 0));
+	sphere->col_g = ft_atoi(get_split_param(param[3], 1));
+	sphere->col_b = ft_atoi(get_split_param(param[3], 2));
 }
 
 int	parse_sphere(t_scene_data *data, char **param)

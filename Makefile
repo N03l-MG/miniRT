@@ -6,7 +6,7 @@
 #    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/08 08:59:28 by jgraf             #+#    #+#              #
-#    Updated: 2025/03/13 17:49:02 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/03/14 17:40:35 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,9 @@ FLAGS = -Wall -Wextra -Werror -flto -Ofast -march=native -MMD -MP $(addprefix -I
 LDFLAGS = -flto #-fsanitize=address
 LIBFT = ./libft/libft.a
 MLX = ./MLX42/build/libmlx42.a
+# Colors
+GREEN = \033[0;32m
+RESET = \033[0m
 
 ifeq ($(shell uname), Darwin)
 	MLX_FLAGS = -ldl -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/" -pthread -lm
@@ -46,9 +49,11 @@ SRCS = main.c \
 	   parse/parse_main.c parse/parse_light.c parse/parse_plane.c parse/parse_sphere.c \
 	   parse/parse_cylinder.c parse/parse_utils.c parse/parse_ambience.c parse/parse_cam.c \
 	   maintainance/logging.c maintainance/error.c maintainance/cleanup.c \
-	   render/render_scene.c \
+	   render/render_scene.c render/camera.c \
 	   color/color.c \
-	   hooks/key_input.c
+	   hooks/key_input.c \
+	   math/vector.c \
+	   assets/sphere.c
 
 OBJ = $(addprefix $(OBJECTS)/, $(SRCS:.c=.o))
 
@@ -59,7 +64,8 @@ OBJ = $(addprefix $(OBJECTS)/, $(SRCS:.c=.o))
 all: mlx_lib ft_lib $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(FLAGS) $^ $(LIBFT) $(MLX) $(MLX_FLAGS) -o $@
+	@printf "$(GREEN)Compiling $(NAME) $(RESET)\n"
+	@$(CC) $(FLAGS) $^ $(LIBFT) $(MLX) $(MLX_FLAGS) -o $@
 
 $(OBJECTS)/%.o: %.c
 	@mkdir -p $(dir $@)
@@ -69,18 +75,20 @@ $(OBJECTS):
 	@mkdir -p $@
 
 mlx_lib:
-	cd MLX42 && cmake -B build && make -C build -j4
+	@cd MLX42 && cmake -B build && make -C build -j4
 
 ft_lib:
-	$(MAKE) -C libft
+	@$(MAKE) -C libft
 
 clean:
-	rm -rf $(OBJECTS)
-	$(MAKE) -C libft fclean
-	cd MLX42 && rm -rf build
+	@printf "$(GREEN)Cleaning project object files $(RESET)\n"
+	@rm -rf $(OBJECTS)
+	@$(MAKE) -C libft fclean
+	@cd MLX42 && rm -rf build
 
 fclean: clean
-	rm -f $(NAME)
+	@printf "$(GREEN)Cleaning all executables $(RESET)\n"
+	@rm -f $(NAME)
 
 re: fclean all
 

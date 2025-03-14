@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_light.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/13 17:55:27 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/14 14:17:29 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 
 static bool	check_valid(t_light *light)
 {
-	if ((light->r < 0 || light->r > 255)
-		|| (light->g < 0 || light->g > 255)
-		|| (light->b < 0 || light->b > 255)
+	if ((light->col_r < 0 || light->col_r > 255)
+		|| (light->col_g < 0 || light->col_g > 255)
+		|| (light->col_b < 0 || light->col_b > 255)
 		|| (light->brightness < 0 || light->brightness > 1))
 		return (printlog(WARNING, "Invalid light object parameters"), false);
 	return (true);
@@ -51,17 +51,18 @@ static void	add_light(t_assets *assets, t_light *new_light)
 	}
 	assets->size++;
 	assets->light_cnt++;
+	printlog(LOG, "Light object setup successful.");
 }
 
 static void	set_params(t_light *light, char **param)
 {
-	light->x = ft_atof(get_split_param(param[1], 0));
-	light->y = ft_atof(get_split_param(param[1], 1));
-	light->z = ft_atof(get_split_param(param[1], 2));
+	light->pos_x = ft_atof(get_split_param(param[1], 0));
+	light->pos_y = ft_atof(get_split_param(param[1], 1));
+	light->pos_z = ft_atof(get_split_param(param[1], 2));
 	light->brightness = ft_atof(param[2]);
-	light->r = ft_atoi(get_split_param(param[3], 0));
-	light->g = ft_atoi(get_split_param(param[3], 1));
-	light->b = ft_atoi(get_split_param(param[3], 2));
+	light->col_r = ft_atoi(get_split_param(param[3], 0));
+	light->col_g = ft_atoi(get_split_param(param[3], 1));
+	light->col_b = ft_atoi(get_split_param(param[3], 2));
 }
 
 int	parse_light(t_scene_data *data, char **param)
