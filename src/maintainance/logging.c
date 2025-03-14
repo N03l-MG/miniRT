@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   warn_log.c                                         :+:      :+:    :+:   */
+/*   logging.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:04:11 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/13 17:17:37 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/14 08:08:55 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,5 +17,5 @@ void	printlog(t_log_type log_type, char *message)
 	if (log_type == LOG)
 		ft_fprintf(1, "Log: %s\n", message);
 	else if (log_type == WARNING)
-		ft_fprintf(1, YELLOW "Warning: %s\n" RESET, message);
+		ft_fprintf(1, YELLOW "Error\n%s\n" RESET, message);
 }

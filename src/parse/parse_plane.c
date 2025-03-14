@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_plane.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/13 17:55:49 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/14 08:15:46 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ static void	add_plane(t_assets *assets, t_plane *new_plane)
 	}
 	assets->size++;
 	assets->plane_cnt++;
+	printlog(LOG, "Plane object setup successful.");
 }
 
 static void	set_params(t_plane *plane, char **param)

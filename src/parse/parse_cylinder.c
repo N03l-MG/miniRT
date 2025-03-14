@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cylinder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/13 17:56:19 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/14 08:17:01 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static void	add_cylinder(t_assets *assets, t_cylinder *new_cylinder)
 	}
 	assets->size ++;
 	assets->cylinder_cnt ++;
+	printlog(LOG, "Cylinder object setup successful.");
 }
 
 static void	set_params(t_cylinder *cylinder, char **param)
@@ -82,7 +83,7 @@ int	parse_cylinder(t_scene_data *data, char **param)
 		return (printlog(WARNING, "Invalid cylinder object position."), 0);
 	if (get_number_of_splits(param[2], ',') != 3)
 		return (printlog(WARNING, "Invalid cylinder object vector."), 0);
-	if (get_number_of_splits(param[3], ',') != 3)
+	if (get_number_of_splits(param[5], ',') != 3)
 		return (printlog(WARNING, "Invalid cylinder color."), 0);
 	new_cylinder = gc_malloc(sizeof(t_cylinder));
 	set_params(new_cylinder, param);
