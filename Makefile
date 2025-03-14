@@ -43,9 +43,12 @@ vpath %.c $(SOURCES)
 ################################################################################
 
 SRCS = main.c \
-	   parse/parse_main.c parse/parse_light.c parse/parse_plane.c parse/parse_sphere.c parse/parse_cylinder.c parse/parse_utils.c \
-	   maintainance/logging.c maintainance/error.c \
-	   render/render_scene.c
+	   parse/parse_main.c parse/parse_light.c parse/parse_plane.c parse/parse_sphere.c \
+	   parse/parse_cylinder.c parse/parse_utils.c parse/parse_ambience.c parse/parse_cam.c \
+	   maintainance/logging.c maintainance/error.c maintainance/cleanup.c \
+	   render/render_scene.c \
+	   color/color.c \
+	   hooks/key_input.c
 
 OBJ = $(addprefix $(OBJECTS)/, $(SRCS:.c=.o))
 
@@ -73,7 +76,7 @@ ft_lib:
 
 clean:
 	rm -rf $(OBJECTS)
-	$(MAKE) -C libft clean
+	$(MAKE) -C libft fclean
 	cd MLX42 && rm -rf build
 
 fclean: clean
