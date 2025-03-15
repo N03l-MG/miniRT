@@ -10,18 +10,36 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// Le funny quake 3 code
-float fast_inverse_sqrt(float number)
+#include "miniRT.h"
+
+// Le funny Quake III code (but safer bcs Wextra)
+float	fast_inverse_sqrt(float number)
 {
-	long	i;
-	float	x2;
-	float	y;
+	t_float_bits	bits;
+	float			x2;
 
 	x2 = number * 0.5F;
-	y = number;
-	i = *(long *)&y;
-	i = 0x5f3759df - (i >> 1);
-	y = *(float *)&i;
-	y = y * (1.5F - (x2 * y * y));
-	return (y);
+	bits.f = number;
+	bits.i = 0x5f3759df - (bits.i >> 1);
+	bits.f = bits.f * (1.5F - (x2 * bits.f * bits.f));
+	return bits.f;
+}
+
+bool	solve_quadratic(double a, double b, double c, double *t0, double *t1)
+{
+	double	discriminant;
+	double	temp;
+
+	discriminant = (b * b) - 4 * (a * c);
+	if (discriminant < 0)
+		return (false);
+	*t0 = (-b - sqrt(discriminant)) / (2.0 * a);
+	*t1 = (-b + sqrt(discriminant)) / (2.0 * a);
+	if (*t0 > *t1)
+	{
+		temp = *t0;
+		*t0 = *t1;
+		*t1 = temp;
+	}
+	return (true);
 }

@@ -52,8 +52,8 @@ SRCS = main.c \
 	   render/render_scene.c render/camera.c \
 	   color/color.c \
 	   hooks/key_input.c \
-	   math/vector.c \
-	   assets/sphere.c
+	   math/vector.c math/calculation.c \
+	   assets/plane.c assets/sphere.c assets/cylinder.c
 
 OBJ = $(addprefix $(OBJECTS)/, $(SRCS:.c=.o))
 
@@ -61,18 +61,23 @@ OBJ = $(addprefix $(OBJECTS)/, $(SRCS:.c=.o))
 ###############                 COMPILATION RULES                ###############
 ################################################################################
 
-all: mlx_lib ft_lib $(NAME)
+all: mlx_lib ft_lib message $(NAME)
 
 $(NAME): $(OBJ)
-	@printf "$(GREEN)Compiling $(NAME) $(RESET)\n"
+	
 	@$(CC) $(FLAGS) $^ $(LIBFT) $(MLX) $(MLX_FLAGS) -o $@
+	@printf "$(GREEN)Succesfully compiled $(NAME)!$(RESET)\n"
 
 $(OBJECTS)/%.o: %.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(FLAGS) -c $< -o $@ $(LDFLAGS)
+	@printf "Compiled %s\n" $<
 
 $(OBJECTS):
 	@mkdir -p $@
+
+message:
+	@printf "Compiling $(NAME)\n"
 
 mlx_lib:
 	@cd MLX42 && cmake -B build && make -C build -j4
@@ -81,7 +86,7 @@ ft_lib:
 	@$(MAKE) -C libft
 
 clean:
-	@printf "$(GREEN)Cleaning project object files $(RESET)\n"
+	@printf "Cleaning project object files\n"
 	@rm -rf $(OBJECTS)
 	@$(MAKE) -C libft fclean
 	@cd MLX42 && rm -rf build

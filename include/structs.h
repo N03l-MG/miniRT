@@ -41,7 +41,8 @@ typedef enum e_asset_type
 	ASS_LIGHT,
 	ASS_PLANE,
 	ASS_SPHERE,
-	ASS_CYLINDER
+	ASS_CYLINDER,
+	NO_TYPE
 }	t_asset_type;
 
 typedef struct s_window_data

@@ -12,8 +12,67 @@
 
 #include "miniRT.h"
 
-void	escape_key(mlx_key_data_t key, void *param)
+static void	escape_key(mlx_key_data_t keydata, t_window_data *window_data)
 {
-	if (key.key == MLX_KEY_ESCAPE && key.action == MLX_PRESS)
-		mlx_close_window((mlx_t *)param);
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+		clean_exit(EXIT_SUCCESS, window_data);
+}
+
+static void	translation_keys(mlx_key_data_t keydata, t_scene_data* data)
+{
+	float move_speed = 0.5f;
+
+	if (keydata.key == MLX_KEY_W && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
+	{
+		data->cam->pos_z += data->cam->vec_z * move_speed;
+		data->cam->pos_x += data->cam->vec_x * move_speed;
+		data->cam->pos_y += data->cam->vec_y * move_speed;
+	}
+	if (keydata.key == MLX_KEY_S && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
+	{
+		data->cam->pos_z -= data->cam->vec_z * move_speed;
+		data->cam->pos_x -= data->cam->vec_x * move_speed;
+		data->cam->pos_y -= data->cam->vec_y * move_speed;
+	}
+}
+
+static void	rotation_keys(mlx_key_data_t keydata, t_scene_data* data)
+{
+	float rotate_speed = 0.1f;
+
+	if (keydata.key == MLX_KEY_RIGHT && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
+	{
+		float old_x = data->cam->vec_x;
+		data->cam->vec_x = data->cam->vec_x * cos(rotate_speed) - data->cam->vec_z * sin(rotate_speed);
+		data->cam->vec_z = old_x * sin(rotate_speed) + data->cam->vec_z * cos(rotate_speed);
+	}
+	if (keydata.key == MLX_KEY_LEFT && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
+	{
+		float old_x = data->cam->vec_x;
+		data->cam->vec_x = data->cam->vec_x * cos(-rotate_speed) - data->cam->vec_z * sin(-rotate_speed);
+		data->cam->vec_z = old_x * sin(-rotate_speed) + data->cam->vec_z * cos(-rotate_speed);
+	}
+	if (keydata.key == MLX_KEY_UP && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
+	{
+		float old_y = data->cam->vec_y;
+		data->cam->vec_y = data->cam->vec_y * cos(rotate_speed) - data->cam->vec_z * sin(rotate_speed);
+		data->cam->vec_z = old_y * sin(rotate_speed) + data->cam->vec_z * cos(rotate_speed);
+	}
+	if (keydata.key == MLX_KEY_DOWN && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
+	{
+		float old_y = data->cam->vec_y;
+		data->cam->vec_y = data->cam->vec_y * cos(-rotate_speed) - data->cam->vec_z * sin(-rotate_speed);
+		data->cam->vec_z = old_y * sin(-rotate_speed) + data->cam->vec_z * cos(-rotate_speed);
+	}
+}
+
+void	key_hook(mlx_key_data_t keydata, void* param)
+{
+	t_scene_data* data = (t_scene_data*)param;
+
+	escape_key(keydata, data->window_data);
+	translation_keys(keydata, data);
+	rotation_keys(keydata, data);
+	camera_setup(data->cam);
+	draw_on_image(data, data->window_data->mlx_image);
 }
