@@ -14,24 +14,23 @@
 
 bool	plane_intersect(t_plane *plane, t_ray ray, double *t)
 {
-    t_vector	plane_normal;
-    t_vector	plane_point;
-    double		denom;
-    double		numer;
+	t_vector	plane_normal;
+	t_vector	plane_point;
+	double		denom;
+	double		numer;
 
-    plane_normal = vec_new(plane->vec_x, plane->vec_y, plane->vec_z);
-    plane_normal = vec_normalize(plane_normal);
-    plane_point = vec_new(plane->pos_x, plane->pos_y, plane->pos_z);
-    denom = vec_dot(ray.direction, plane_normal);
-    if (fabs(denom) < 1e-6)
-        return false;
-    numer = vec_dot(vec_sub(plane_point, ray.origin), plane_normal);
-    *t = numer / denom;
-    return (*t >= 0);
+	plane_normal = vec_new(plane->vec_x, plane->vec_y, plane->vec_z);
+	plane_normal = vec_normalize(plane_normal);
+	plane_point = vec_new(plane->pos_x, plane->pos_y, plane->pos_z);
+	denom = vec_dot(ray.direction, plane_normal);
+	if (fabs(denom) < 1e-6)
+		return false;
+	numer = vec_dot(vec_sub(plane_point, ray.origin), plane_normal);
+	*t = numer / denom;
+	return (*t >= 0);
 }
 
-t_vector	plane_normal(t_plane *plane, t_vector point)
+t_vector	plane_normal(t_plane *plane)
 {
-    (void)point;
-    return vec_normalize(vec_new(plane->vec_x, plane->vec_y, plane->vec_z));
+	return vec_normalize(vec_new(plane->vec_x, plane->vec_y, plane->vec_z));
 }

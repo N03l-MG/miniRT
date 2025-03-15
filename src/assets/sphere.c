@@ -49,11 +49,11 @@ bool	sphere_intersect(t_sphere *sphere, t_ray ray, double *t)
 	return (true);
 }
 
-t_vector    sphere_normal(t_sphere *sphere, t_vector point)
+t_vector	sphere_normal(t_sphere *sphere, t_vector point)
 {
-    t_vector sphere_center;
-    
-    sphere_center = vec_new(sphere->pos_x, sphere->pos_y, sphere->pos_z);
-    return vec_normalize(vec_sub(point, sphere_center));
+	t_vector	sphere_center;
+	
+	sphere_center = vec_new(sphere->pos_x, sphere->pos_y, sphere->pos_z);
+	return vec_normalize(vec_sub(point, sphere_center));
 }
 

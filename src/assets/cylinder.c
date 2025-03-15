@@ -59,14 +59,14 @@ bool	cylinder_intersect(t_cylinder *cyl, t_ray ray, double *t)
 
 t_vector	cylinder_normal(t_cylinder *cyl, t_vector point)
 {
-    t_vector	center;
+	t_vector	center;
 	t_vector	axis;
 	t_vector	cp;
-    
-    center = vec_new(cyl->pos_x, cyl->pos_y, cyl->pos_z);
-    axis = vec_normalize(vec_new(cyl->vec_x, cyl->vec_y, cyl->vec_z));
-    cp = vec_sub(point, center);
-    double t = vec_dot(cp, axis);
-    t_vector on_axis = vec_add(center, vec_scale(axis, t));
-    return vec_normalize(vec_sub(point, on_axis));
+
+	center = vec_new(cyl->pos_x, cyl->pos_y, cyl->pos_z);
+	axis = vec_normalize(vec_new(cyl->vec_x, cyl->vec_y, cyl->vec_z));
+	cp = vec_sub(point, center);
+	double t = vec_dot(cp, axis);
+	t_vector on_axis = vec_add(center, vec_scale(axis, t));
+	return vec_normalize(vec_sub(point, on_axis));
 }

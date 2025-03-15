@@ -53,8 +53,11 @@ void		camera_setup(t_camera *cam);
 
 // Shapes
 bool		plane_intersect(t_plane *plane, t_ray ray, double *t);
+t_vector	plane_normal(t_plane *plane);
 bool		sphere_intersect(t_sphere *sphere, t_ray ray, double *t);
+t_vector	sphere_normal(t_sphere *sphere, t_vector point);
 bool		cylinder_intersect(t_cylinder *cyl, t_ray ray, double *t);
+t_vector	cylinder_normal(t_cylinder *cyl, t_vector point);
 
 //	Logging
 void		printlog(t_log_type log_type, char *message);
