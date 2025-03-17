@@ -47,16 +47,16 @@ t_vector    vec_sub(t_vector v1, t_vector v2);
 t_vector    vec_scale(t_vector v, float scale);
 float       vec_dot(t_vector v1, t_vector v2);
 t_vector    vec_cross(t_vector v1, t_vector v2);
-//float       vec_length(t_vector v);
+float		vec_length(t_vector v);
 t_vector    vec_normalize(t_vector v);
 
-// Ray operations
-t_ray       ray_new(t_vector origin, t_vector direction);
-t_vector    ray_at(t_ray ray, float t);
+// // Ray operations
+// t_ray       ray_new(t_vector origin, t_vector direction);
+// t_vector    ray_at(t_ray ray, float t);
 
 // Math calculations
 float		fast_inverse_sqrt(float number);
-bool		solve_quadratic(double a, double b, double c, double *t0, double *t1);
+bool		solve_quadratic(float a, float b, float c, float *t0, float *t1);
 
 
 #endif

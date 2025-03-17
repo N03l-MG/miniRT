@@ -20,8 +20,13 @@ static void	escape_key(mlx_key_data_t keydata, t_window_data *window_data)
 
 static void	translation_keys(mlx_key_data_t keydata, t_scene_data* data)
 {
-	float move_speed = 0.5f;
+	float		move_speed = 0.8f;
+	t_vector	up = vec_new(0, 1, 0);
+	t_vector	forward;
+	t_vector	strafe;
 
+	forward = vec_new(data->cam->vec_x, data->cam->vec_y, data->cam->vec_z);
+	strafe = vec_normalize(vec_cross(forward, up));
 	if (keydata.key == MLX_KEY_W && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 	{
 		data->cam->pos_z += data->cam->vec_z * move_speed;
@@ -33,6 +38,18 @@ static void	translation_keys(mlx_key_data_t keydata, t_scene_data* data)
 		data->cam->pos_z -= data->cam->vec_z * move_speed;
 		data->cam->pos_x -= data->cam->vec_x * move_speed;
 		data->cam->pos_y -= data->cam->vec_y * move_speed;
+	}
+	if (keydata.key == MLX_KEY_A && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
+	{
+		data->cam->pos_x -= strafe.x * move_speed;
+		data->cam->pos_y -= strafe.y * move_speed;
+		data->cam->pos_z -= strafe.z * move_speed;
+	}
+	if (keydata.key == MLX_KEY_D && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
+	{
+		data->cam->pos_x += strafe.x * move_speed;
+		data->cam->pos_y += strafe.y * move_speed;
+		data->cam->pos_z += strafe.z * move_speed;
 	}
 }
 

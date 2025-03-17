@@ -12,49 +12,81 @@
 
 #include "miniRT.h"
 
-bool	cylinder_intersect(t_cylinder *cyl, t_ray ray, double *t)
+static bool intersect_caps(t_cylinder *cyl, t_ray ray, double *t)
 {
 	t_vector	center;
 	t_vector	axis;
-	t_vector	oc;
-	double		a;
-	double		b;
-	double		c;
-	double		t0;
-	double		t1;
-	double		y0;
-	double		y1;
 	double		radius;
+	double		denom;
+	t_vector	hit;
+	double		t_cap;
+	t_vector	top_center;
+
+	center = vec_new(cyl->pos_x, cyl->pos_y, cyl->pos_z);
+	axis = vec_normalize(vec_new(cyl->vec_x, cyl->vec_y, cyl->vec_z));
+	radius = cyl->diameter / 2.0;
+	denom = vec_dot(ray.direction, axis);
+	if (fabs(denom) > 1e-6)
+	{
+		t_cap = vec_dot(vec_sub(center, ray.origin), axis) / denom;
+		hit = vec_add(ray.origin, vec_scale(ray.direction, t_cap));
+		if (t_cap > 0 && vec_length(vec_sub(hit, center)) <= radius)
+		{
+			*t = t_cap;
+			return (true);
+		}
+	}
+	top_center = vec_add(center, vec_scale(axis, cyl->height));
+	denom = vec_dot(ray.direction, axis);
+	if (fabs(denom) > 1e-6)
+	{
+		double t_cap = vec_dot(vec_sub(top_center, ray.origin), axis) / denom;
+		hit = vec_add(ray.origin, vec_scale(ray.direction, t_cap));
+		if (t_cap > 0 && vec_length(vec_sub(hit, top_center)) <= radius)
+		{
+			*t = t_cap;
+			return (true);
+		}
+	}
+	return (false);
+}
+
+bool cylinder_intersect(t_cylinder *cyl, t_ray ray, double *t)
+{
+	t_vector    center;
+	t_vector    axis;
+	t_vector    oc;
+	float       a;
+	float       b;
+	float       c;
+	float       t0;
+	float       t1;
+	float       radius;
 	
 	center = vec_new(cyl->pos_x, cyl->pos_y, cyl->pos_z);
 	axis = vec_normalize(vec_new(cyl->vec_x, cyl->vec_y, cyl->vec_z));
 	radius = cyl->diameter / 2.0;
 	oc = vec_sub(ray.origin, center);
-	t_vector cross1 = vec_cross(ray.direction, axis);
-	t_vector cross2 = vec_cross(oc, axis);
-	a = vec_dot(cross1, cross1);
-	b = 2 * vec_dot(cross1, cross2);
-	c = vec_dot(cross2, cross2) - (radius * radius);
+	a = vec_dot(vec_cross(ray.direction, axis), vec_cross(ray.direction, axis));
+	b = 2 * vec_dot(vec_cross(ray.direction, axis), vec_cross(oc, axis));
+	c = vec_dot(vec_cross(oc, axis), vec_cross(oc, axis)) - (radius * radius);
 	if (!solve_quadratic(a, b, c, &t0, &t1))
-		return (false);
-	y0 = vec_dot(vec_scale(ray.direction, t0), axis) + vec_dot(oc, axis);
-	y1 = vec_dot(vec_scale(ray.direction, t1), axis) + vec_dot(oc, axis);
-	if (y0 < 0)
-	{
-		if (y1 < 0)
-			return (false);
+		return (intersect_caps(cyl, ray, t));
+	float h0 = vec_dot(vec_sub(vec_add(ray.origin, vec_scale(ray.direction, t0)),
+		center), axis);
+	float h1 = vec_dot(vec_sub(vec_add(ray.origin, vec_scale(ray.direction, t1)),
+		center), axis);
+	if (!(h0 >= 0 && h0 <= cyl->height) && !(h1 >= 0 && h1 <= cyl->height))
+		return (intersect_caps(cyl, ray, t));
+	if (!(h0 >= 0 && h0 <= cyl->height))
 		t0 = t1;
-		y0 = y1;
-	}
-	else if (y0 > cyl->height)
-	{
-		if (y1 > cyl->height)
-			return (false);
-		t0 = t1;
-		y0 = y1;
-	}
-	*t = t0;
-	return (true);
+	else if (!(h1 >= 0 && h1 <= cyl->height))
+		t1 = t0;
+	*t = (t0 < t1) ? t0 : t1;
+	double t_caps;
+	if (intersect_caps(cyl, ray, &t_caps) && t_caps < *t)
+		*t = t_caps;
+	return (*t > 0);
 }
 
 t_vector	cylinder_normal(t_cylinder *cyl, t_vector point)
@@ -66,7 +98,11 @@ t_vector	cylinder_normal(t_cylinder *cyl, t_vector point)
 	center = vec_new(cyl->pos_x, cyl->pos_y, cyl->pos_z);
 	axis = vec_normalize(vec_new(cyl->vec_x, cyl->vec_y, cyl->vec_z));
 	cp = vec_sub(point, center);
-	double t = vec_dot(cp, axis);
-	t_vector on_axis = vec_add(center, vec_scale(axis, t));
-	return vec_normalize(vec_sub(point, on_axis));
+	if (fabs(vec_dot(cp, axis)) < 0.001f)
+		return (vec_scale(axis, -1.0));
+	if (fabs(vec_dot(vec_sub(point, 
+		vec_add(center, vec_scale(axis, cyl->height))), axis)) < 0.001f)
+		return (axis);
+	return (vec_normalize(vec_sub(point, vec_add(center,
+		vec_scale(axis, vec_dot(cp, axis))))));
 }

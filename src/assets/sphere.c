@@ -16,10 +16,10 @@ bool	sphere_intersect(t_sphere *sphere, t_ray ray, double *t)
 {
 	t_vector	sphere_center;
 	t_vector	oc;
-	double		a;
-	double		b;
-	double		c;
-	double		discriminant;
+	float		a;
+	float		b;
+	float		c;
+	float		discriminant;
 	float		radius;
 
 	sphere_center = vec_new(sphere->pos_x, sphere->pos_y, sphere->pos_z);
@@ -31,11 +31,11 @@ bool	sphere_intersect(t_sphere *sphere, t_ray ray, double *t)
 	discriminant = b * b - 4 * a * c;
 	if (discriminant < 0)
 		return (false);
-	double t0 = (-b - sqrt(discriminant)) / (2.0 * a);
-	double t1 = (-b + sqrt(discriminant)) / (2.0 * a);
+	float t0 = (-b - sqrt(discriminant)) / (2.0 * a);
+	float t1 = (-b + sqrt(discriminant)) / (2.0 * a);
 	if (t0 > t1)
 	{
-		double tmp = t0;
+		float tmp = t0;
 		t0 = t1;
 		t1 = tmp;
 	}

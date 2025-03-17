@@ -42,7 +42,7 @@ static t_vector	surface_normal(void *obj, t_vector point, t_asset_type type)
 	return (vec_new(0, 0, 0));
 }
 
-static bool	is_occluded(t_scene_data *data, t_ray shadow_ray)
+static bool	is_occluded(t_scene_data *data, t_ray shadow_ray, float light_distance)
 {
 	t_asset_node	*node;
 	double			t;
@@ -51,13 +51,16 @@ static bool	is_occluded(t_scene_data *data, t_ray shadow_ray)
 	while (node)
 	{
 		if (node->type == ASS_PLANE)
-			if (plane_intersect((t_plane *)node->asset_struct, shadow_ray, &t) && t > 0.001f)
+			if (plane_intersect((t_plane *)node->asset_struct, shadow_ray, &t) 
+				&& t > 0.001f && t < light_distance)
 				return (true);
 		if (node->type == ASS_SPHERE)
-			if (sphere_intersect((t_sphere *)node->asset_struct, shadow_ray, &t) && t > 0.001f)
+			if (sphere_intersect((t_sphere *)node->asset_struct, shadow_ray, &t) 
+				&& t > 0.001f && t < light_distance)
 				return (true);
 		if (node->type == ASS_CYLINDER)
-			if (cylinder_intersect((t_cylinder *)node->asset_struct, shadow_ray, &t) && t > 0.001f)
+			if (cylinder_intersect((t_cylinder *)node->asset_struct, shadow_ray, &t) 
+				&& t > 0.001f && t < light_distance)
 				return (true);
 		node = node->next;
 	}
@@ -122,11 +125,12 @@ static uint32_t	ray_hit(t_scene_data *data, t_ray ray)
 	light = get_scene_light(data);
 	if (!light)
 		return (col_rgb(0, 0, 0, 0xFF));
-	light_dir = vec_normalize(vec_sub(
-		vec_new(light->pos_x, light->pos_y, light->pos_z), intersect));
+	t_vector light_pos = vec_new(light->pos_x, light->pos_y, light->pos_z);
+	light_dir = vec_normalize(vec_sub(light_pos, intersect));
 	shadow_ray.origin = vec_add(intersect, vec_scale(normal, 0.001f));
 	shadow_ray.direction = light_dir;
-	if (is_occluded(data, shadow_ray))
+	float light_distance = vec_length(vec_sub(light_pos, intersect));
+	if (is_occluded(data, shadow_ray, light_distance))
 		return (col_rgb(0, 0, 0, 0xFF));
 	float diffuse = fmax(vec_dot(normal, light_dir), 0.0f);
 	switch (closest_type)

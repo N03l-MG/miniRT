@@ -42,6 +42,11 @@ float		vec_dot(t_vector v1, t_vector v2)
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
 
+float		vec_length(t_vector v)
+{
+	return (sqrt(vec_dot(v, v)));
+}
+
 t_vector	vec_cross(t_vector v1, t_vector v2)
 {
 	return (vec_new(

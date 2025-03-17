@@ -22,13 +22,13 @@ float	fast_inverse_sqrt(float number)
 	bits.f = number;
 	bits.i = 0x5f3759df - (bits.i >> 1);
 	bits.f = bits.f * (1.5F - (x2 * bits.f * bits.f));
-	return bits.f;
+	return (bits.f);
 }
 
-bool	solve_quadratic(double a, double b, double c, double *t0, double *t1)
+bool	solve_quadratic(float a, float b, float c, float *t0, float *t1)
 {
-	double	discriminant;
-	double	temp;
+	float	discriminant;
+	float	temp;
 
 	discriminant = (b * b) - 4 * (a * c);
 	if (discriminant < 0)
