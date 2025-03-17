@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:45:06 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/14 17:22:28 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/17 12:42:37 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,21 +133,21 @@ static uint32_t	ray_hit(t_scene_data *data, t_ray ray)
 	{
 		case ASS_PLANE:
 			return (col_rgb(
-				((t_plane *)closest_obj)->col_r * diffuse * light->brightness,
-				((t_plane *)closest_obj)->col_g * diffuse * light->brightness,
-				((t_plane *)closest_obj)->col_b * diffuse * light->brightness,
+				fmin(((t_plane *)closest_obj)->col_r * diffuse * light->brightness + data->ambient->col_r * data->ambient->ratio, 255),
+				fmin(((t_plane *)closest_obj)->col_g * diffuse * light->brightness + data->ambient->col_g * data->ambient->ratio, 255),
+				fmin(((t_plane *)closest_obj)->col_b * diffuse * light->brightness + data->ambient->col_b * data->ambient->ratio, 255),
 				0xFF));
 		case ASS_SPHERE:
 			return (col_rgb(
-				((t_sphere *)closest_obj)->col_r * diffuse * light->brightness,
-				((t_sphere *)closest_obj)->col_g * diffuse * light->brightness,
-				((t_sphere *)closest_obj)->col_b * diffuse * light->brightness,
+				fmin(((t_sphere *)closest_obj)->col_r * diffuse * light->brightness + data->ambient->col_r * data->ambient->ratio, 255),
+				fmin(((t_sphere *)closest_obj)->col_g * diffuse * light->brightness + data->ambient->col_g * data->ambient->ratio, 255),
+				fmin(((t_sphere *)closest_obj)->col_b * diffuse * light->brightness + data->ambient->col_b * data->ambient->ratio, 255),
 				0xFF));
 		case ASS_CYLINDER:
 			return (col_rgb(
-				((t_cylinder *)closest_obj)->col_r * diffuse * light->brightness,
-				((t_cylinder *)closest_obj)->col_g * diffuse * light->brightness,
-				((t_cylinder *)closest_obj)->col_b * diffuse * light->brightness,
+				fmin(((t_cylinder *)closest_obj)->col_r * diffuse * light->brightness + data->ambient->col_r * data->ambient->ratio, 255),
+				fmin(((t_cylinder *)closest_obj)->col_g * diffuse * light->brightness + data->ambient->col_g * data->ambient->ratio, 255),
+				fmin(((t_cylinder *)closest_obj)->col_b * diffuse * light->brightness + data->ambient->col_b * data->ambient->ratio, 255),
 				0xFF));
 		default:
 			return (col_rgb(0, 0, 0, 0xFF));
