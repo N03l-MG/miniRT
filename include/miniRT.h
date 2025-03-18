@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:05:08 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/14 17:43:25 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/18 11:27:42 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,11 @@ int			get_number_of_splits(char *str, char c);
 int			get_number_of_split_elements(char **element);
 
 //	Key Hooks
-void		key_hook(mlx_key_data_t keydata, void* param);
+void		key_hook(mlx_key_data_t keydata, void *param);
 
 //	Color
 uint32_t	col_rgb(int r, int g, int b, int a);
+uint32_t	merge_color(uint32_t col1, uint32_t col2, float val);
 int			get_r(uint32_t rgb);
 int			get_g(uint32_t rgb);
 int			get_b(uint32_t rgb);

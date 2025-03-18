@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:45:06 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/17 12:42:37 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/18 17:30:58 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,40 @@ static bool	is_occluded(t_scene_data *data, t_ray shadow_ray, float light_distan
 		node = node->next;
 	}
 	return (false);
+}
+
+static t_vector	vec_random_in_sphere(float radius)
+{
+    t_vector	p;
+    do {
+        p = vec_new(
+            (rand() / (float)RAND_MAX) * 2.0f - 1.0f,
+            (rand() / (float)RAND_MAX) * 2.0f - 1.0f,
+            (rand() / (float)RAND_MAX) * 2.0f - 1.0f
+        );
+    } while (vec_length(p) > 1.0f);
+    return vec_scale(p, radius);
+}
+
+static float	shadow_factor(t_scene_data *data, t_ray shadow_ray, t_light *light)
+{
+    int blocked_rays = 0;
+    int num_shadow_rays = 128;
+    float light_radius = 3.0f;
+
+    for (int i = 0; i < num_shadow_rays; i++)
+    {
+        t_vector random_point = vec_add(
+            vec_new(light->pos_x, light->pos_y, light->pos_z),
+            vec_random_in_sphere(light_radius)
+        );
+        t_vector new_direction = vec_normalize(vec_sub(random_point, shadow_ray.origin));
+        t_ray new_shadow_ray = { shadow_ray.origin, new_direction };
+        float light_distance = vec_length(vec_sub(random_point, shadow_ray.origin));
+        if (is_occluded(data, new_shadow_ray, light_distance))
+            blocked_rays++;
+    }
+    return 1.0f - ((float)blocked_rays / num_shadow_rays);
 }
 
 static uint32_t	ray_hit(t_scene_data *data, t_ray ray)
@@ -129,32 +163,30 @@ static uint32_t	ray_hit(t_scene_data *data, t_ray ray)
 	light_dir = vec_normalize(vec_sub(light_pos, intersect));
 	shadow_ray.origin = vec_add(intersect, vec_scale(normal, 0.001f));
 	shadow_ray.direction = light_dir;
-	float light_distance = vec_length(vec_sub(light_pos, intersect));
-	if (is_occluded(data, shadow_ray, light_distance))
-		return (col_rgb(0, 0, 0, 0xFF));
-	float diffuse = fmax(vec_dot(normal, light_dir), 0.0f);
+	float shadow_intensity = shadow_factor(data, shadow_ray, light);
+	float diffuse = fmax(vec_dot(normal, light_dir), 0.0f) * shadow_intensity;
 	switch (closest_type)
 	{
 		case ASS_PLANE:
 			return (col_rgb(
-				fmin(((t_plane *)closest_obj)->col_r * diffuse * light->brightness + data->ambient->col_r * data->ambient->ratio, 255),
-				fmin(((t_plane *)closest_obj)->col_g * diffuse * light->brightness + data->ambient->col_g * data->ambient->ratio, 255),
-				fmin(((t_plane *)closest_obj)->col_b * diffuse * light->brightness + data->ambient->col_b * data->ambient->ratio, 255),
+				fmin(((t_plane *)closest_obj)->col_r * diffuse * light->brightness + data->ambient->col_r * data->ambient->ratio, 0xFF),
+				fmin(((t_plane *)closest_obj)->col_g * diffuse * light->brightness + data->ambient->col_g * data->ambient->ratio, 0xFF),
+				fmin(((t_plane *)closest_obj)->col_b * diffuse * light->brightness + data->ambient->col_b * data->ambient->ratio, 0xFF),
 				0xFF));
 		case ASS_SPHERE:
 			return (col_rgb(
-				fmin(((t_sphere *)closest_obj)->col_r * diffuse * light->brightness + data->ambient->col_r * data->ambient->ratio, 255),
-				fmin(((t_sphere *)closest_obj)->col_g * diffuse * light->brightness + data->ambient->col_g * data->ambient->ratio, 255),
-				fmin(((t_sphere *)closest_obj)->col_b * diffuse * light->brightness + data->ambient->col_b * data->ambient->ratio, 255),
+				fmin(((t_sphere *)closest_obj)->col_r * diffuse * light->brightness + data->ambient->col_r * data->ambient->ratio, 0xFF),
+				fmin(((t_sphere *)closest_obj)->col_g * diffuse * light->brightness + data->ambient->col_g * data->ambient->ratio, 0xFF),
+				fmin(((t_sphere *)closest_obj)->col_b * diffuse * light->brightness + data->ambient->col_b * data->ambient->ratio, 0xFF),
 				0xFF));
 		case ASS_CYLINDER:
 			return (col_rgb(
-				fmin(((t_cylinder *)closest_obj)->col_r * diffuse * light->brightness + data->ambient->col_r * data->ambient->ratio, 255),
-				fmin(((t_cylinder *)closest_obj)->col_g * diffuse * light->brightness + data->ambient->col_g * data->ambient->ratio, 255),
-				fmin(((t_cylinder *)closest_obj)->col_b * diffuse * light->brightness + data->ambient->col_b * data->ambient->ratio, 255),
+				fmin(((t_cylinder *)closest_obj)->col_r * diffuse * light->brightness + data->ambient->col_r * data->ambient->ratio, 0xFF),
+				fmin(((t_cylinder *)closest_obj)->col_g * diffuse * light->brightness + data->ambient->col_g * data->ambient->ratio, 0xFF),
+				fmin(((t_cylinder *)closest_obj)->col_b * diffuse * light->brightness + data->ambient->col_b * data->ambient->ratio, 0xFF),
 				0xFF));
 		default:
-			return (col_rgb(0, 0, 0, 0xFF));
+			return col_rgb(0, 0, 0, 0xFF);
 	}
 }
 
@@ -184,7 +216,7 @@ void	render_scene(t_scene_data *data)
 	window_data.mlx_window = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 	if (!window_data.mlx_window)
 		fatal_error(ERR_WINDOW, &window_data);
-	window_data.mlx_image = mlx_new_image(window_data.mlx_window, 1280, 720);
+	window_data.mlx_image = mlx_new_image(window_data.mlx_window, WIDTH, HEIGHT);
 	if (!window_data.mlx_image)
 		fatal_error(ERR_IMAGE, &window_data);
 	window_data.image_data = (unsigned char *)window_data.mlx_image->pixels;
