@@ -17,19 +17,19 @@ static t_vector	get_intersect(t_ray ray, double t)
 	return vec_add(ray.origin, vec_scale(ray.direction, t));
 }
 
-	static t_light	*get_scene_light(t_scene_data *data)
-	{
-		t_asset_node	*node;
+static t_light	*get_scene_light(t_scene_data *data)
+{
+	t_asset_node	*node;
 
-		node = data->assets->head;
-		while (node)
-		{
-			if (node->type == ASS_LIGHT)
-				return ((t_light *)node->asset_struct);
-			node = node->next;
-		}
-		return (NULL);
+	node = data->assets->head;
+	while (node)
+	{
+		if (node->type == ASS_LIGHT)
+			return ((t_light *)node->asset_struct);
+		node = node->next;
 	}
+	return (NULL);
+}
 
 static t_vector	surface_normal(void *obj, t_vector point, t_asset_type type)
 {
