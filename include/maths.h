@@ -49,6 +49,7 @@ float       vec_dot(t_vector v1, t_vector v2);
 t_vector    vec_cross(t_vector v1, t_vector v2);
 float		vec_length(t_vector v);
 t_vector    vec_normalize(t_vector v);
+t_vector	vec_random(float min, float max);
 
 // // Ray operations
 // t_ray       ray_new(t_vector origin, t_vector direction);

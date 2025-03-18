@@ -55,32 +55,38 @@ static void	translation_keys(mlx_key_data_t keydata, t_scene_data* data)
 
 static void	rotation_keys(mlx_key_data_t keydata, t_scene_data* data)
 {
-	float rotate_speed = 0.1f;
+	float	rotate_speed = 0.05f;
+	float	old_x;
+	float	len;
 
 	if (keydata.key == MLX_KEY_RIGHT && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 	{
-		float old_x = data->cam->vec_x;
+		old_x = data->cam->vec_x;
 		data->cam->vec_x = data->cam->vec_x * cos(rotate_speed) - data->cam->vec_z * sin(rotate_speed);
 		data->cam->vec_z = old_x * sin(rotate_speed) + data->cam->vec_z * cos(rotate_speed);
 	}
 	if (keydata.key == MLX_KEY_LEFT && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 	{
-		float old_x = data->cam->vec_x;
+		old_x = data->cam->vec_x;
 		data->cam->vec_x = data->cam->vec_x * cos(-rotate_speed) - data->cam->vec_z * sin(-rotate_speed);
 		data->cam->vec_z = old_x * sin(-rotate_speed) + data->cam->vec_z * cos(-rotate_speed);
 	}
 	if (keydata.key == MLX_KEY_UP && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 	{
-		float old_y = data->cam->vec_y;
-		data->cam->vec_y = data->cam->vec_y * cos(rotate_speed) - data->cam->vec_z * sin(rotate_speed);
-		data->cam->vec_z = old_y * sin(rotate_speed) + data->cam->vec_z * cos(rotate_speed);
+		if (data->cam->vec_y < 0.95f)
+			data->cam->vec_y += rotate_speed;
 	}
 	if (keydata.key == MLX_KEY_DOWN && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 	{
-		float old_y = data->cam->vec_y;
-		data->cam->vec_y = data->cam->vec_y * cos(-rotate_speed) - data->cam->vec_z * sin(-rotate_speed);
-		data->cam->vec_z = old_y * sin(-rotate_speed) + data->cam->vec_z * cos(-rotate_speed);
+		if (data->cam->vec_y > -0.95f)
+			data->cam->vec_y -= rotate_speed;
 	}
+	len = sqrt(data->cam->vec_x * data->cam->vec_x
+				+ data->cam->vec_y * data->cam->vec_y
+				+ data->cam->vec_z * data->cam->vec_z);
+	data->cam->vec_x /= len;
+	data->cam->vec_y /= len;
+	data->cam->vec_z /= len;
 }
 
 void	key_hook(mlx_key_data_t keydata, void* param)

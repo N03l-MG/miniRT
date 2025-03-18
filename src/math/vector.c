@@ -56,11 +56,6 @@ t_vector	vec_cross(t_vector v1, t_vector v2)
 	));
 }
 
-// float       vec_length(t_vector v)
-// {
-//     return (sqrt(vec_dot(v, v)));
-// }
-
 t_vector	vec_normalize(t_vector v)
 {
 	float	length_squared;
@@ -69,4 +64,18 @@ t_vector	vec_normalize(t_vector v)
 	if (length_squared == 0)
 		return (vec_new(0, 0, 0));
 	return (vec_scale(v, fast_inverse_sqrt(length_squared)));
+}
+
+static float	rand_range(float min, float max)
+{
+    return min + (max - min) * ((float)rand() / RAND_MAX);
+}
+
+t_vector	vec_random(float min, float max)
+{
+    return (t_vector){
+        .x = rand_range(min, max),
+        .y = rand_range(min, max),
+        .z = rand_range(min, max)
+    };
 }
