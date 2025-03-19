@@ -6,7 +6,7 @@
 #    By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/08 08:59:28 by jgraf             #+#    #+#              #
-#    Updated: 2025/03/14 17:40:35 by nmonzon          ###   ########.fr        #
+#    Updated: 2025/03/19 18:25:55 by nmonzon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ SRCS = main.c \
 	   parse/parse_cylinder.c parse/parse_utils.c parse/parse_ambience.c parse/parse_cam.c \
 	   maintainance/logging.c maintainance/error.c maintainance/cleanup.c \
 	   render/render_scene.c render/camera.c \
-	   color/color.c \
+	   color/color.c color/tcolor.c\
 	   hooks/key_input.c \
 	   math/vector.c math/calculation.c \
 	   assets/plane.c assets/sphere.c assets/cylinder.c
