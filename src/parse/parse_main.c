@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:49:10 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/14 10:52:28 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/19 17:54:02 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,25 @@ static void	scene_init(t_scene_data *data)
 	data->assets->cylinder_cnt = 0;
 }
 
+static void	pass_color_to_parent(t_assets *assets)
+{
+	t_asset_node	*current;
+
+	current = assets->head;
+	while (current)
+	{
+		if (current->type == ASS_LIGHT)
+			current->col = ((t_light *)current->asset_struct)->col;
+		else if (current->type == ASS_PLANE)
+			current->col = ((t_plane *)current->asset_struct)->col;
+		else if (current->type == ASS_SPHERE)
+			current->col = ((t_sphere *)current->asset_struct)->col;
+		else if (current->type == ASS_CYLINDER)
+			current->col = ((t_cylinder *)current->asset_struct)->col;
+		current = current->next;
+	}
+}
+
 void	parse_elements(t_scene_data *data, int fd)
 {
 	char	*line;
@@ -89,4 +108,5 @@ void	parse_elements(t_scene_data *data, int fd)
 		line = get_next_line(fd);
 	}
 	check_valid(data);
+	pass_color_to_parent(data->assets);
 }

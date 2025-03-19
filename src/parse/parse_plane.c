@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/14 14:18:27 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/18 15:59:11 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ static bool	check_valid(t_plane *plane)
 	if ((plane->vec_x < -1 || plane->vec_x > 1)
 		|| (plane->vec_y < -1 || plane->vec_y > 1)
 		|| (plane->vec_z < -1 || plane->vec_z > 1)
-		|| (plane->col_r < 0 || plane->col_r > 255)
-		|| (plane->col_g < 0 || plane->col_g > 255)
-		|| (plane->col_b < 0 || plane->col_b > 255))
+		|| (plane->col.r < 0 || plane->col.r > 255)
+		|| (plane->col.g < 0 || plane->col.g > 255)
+		|| (plane->col.b < 0 || plane->col.b > 255))
 		return (printlog(WARNING, "Invalid plane object parameters"), false);
 	return (true);
 }
@@ -64,9 +64,9 @@ static void	set_params(t_plane *plane, char **param)
 	plane->vec_x = ft_atof(get_split_param(param[2], 0));
 	plane->vec_y = ft_atof(get_split_param(param[2], 1));
 	plane->vec_z = ft_atof(get_split_param(param[2], 2));
-	plane->col_r = ft_atoi(get_split_param(param[3], 0));
-	plane->col_g = ft_atoi(get_split_param(param[3], 1));
-	plane->col_b = ft_atoi(get_split_param(param[3], 2));
+	plane->col.r = ft_atoi(get_split_param(param[3], 0));
+	plane->col.g = ft_atoi(get_split_param(param[3], 1));
+	plane->col.b = ft_atoi(get_split_param(param[3], 2));
 }
 
 int	parse_plane(t_scene_data *data, char **param)

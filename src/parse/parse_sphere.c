@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/14 14:19:42 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/18 15:59:09 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 
 static bool	check_valid(t_sphere *sphere)
 {
-	if ((sphere->col_r < 0 || sphere->col_r > 255)
-		|| (sphere->col_g < 0 || sphere->col_g > 255)
-		|| (sphere->col_b < 0 || sphere->col_b > 255)
+	if ((sphere->col.r < 0 || sphere->col.r > 255)
+		|| (sphere->col.g < 0 || sphere->col.g > 255)
+		|| (sphere->col.b < 0 || sphere->col.b > 255)
 		|| (sphere->diameter < 0))
 		return (printlog(WARNING, "Invalid sphere object parameters"), false);
 	return (true);
@@ -60,9 +60,9 @@ static void	set_params(t_sphere *sphere, char **param)
 	sphere->pos_y = ft_atof(get_split_param(param[1], 1));
 	sphere->pos_z = ft_atof(get_split_param(param[1], 2));
 	sphere->diameter = ft_atof(param[2]);
-	sphere->col_r = ft_atoi(get_split_param(param[3], 0));
-	sphere->col_g = ft_atoi(get_split_param(param[3], 1));
-	sphere->col_b = ft_atoi(get_split_param(param[3], 2));
+	sphere->col.r = ft_atoi(get_split_param(param[3], 0));
+	sphere->col.g = ft_atoi(get_split_param(param[3], 1));
+	sphere->col.b = ft_atoi(get_split_param(param[3], 2));
 }
 
 int	parse_sphere(t_scene_data *data, char **param)

@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/14 14:16:59 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/18 16:47:43 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ static bool	check_valid(t_cylinder *cylinder)
 	if ((cylinder->vec_x < -1 || cylinder->vec_x > 1)
 		|| (cylinder->vec_y < -1 || cylinder->vec_y > 1)
 		|| (cylinder->vec_z < -1 || cylinder->vec_z > 1)
-		|| (cylinder->col_r < 0 || cylinder->col_r > 255)
-		|| (cylinder->col_g < 0 || cylinder->col_g > 255)
-		|| (cylinder->col_b < 0 || cylinder->col_b > 255)
+		|| (cylinder->col.r < 0 || cylinder->col.r > 255)
+		|| (cylinder->col.g < 0 || cylinder->col.g > 255)
+		|| (cylinder->col.b < 0 || cylinder->col.b > 255)
 		|| (cylinder->diameter < 0)
 		|| (cylinder->height < 0))
 		return (printlog(WARNING, "Invalid cylinder object parameters"), false);
@@ -68,9 +68,9 @@ static void	set_params(t_cylinder *cylinder, char **param)
 	cylinder->vec_z = ft_atof(get_split_param(param[2], 2));
 	cylinder->diameter = ft_atof(param[3]);
 	cylinder->height = ft_atof(param[4]);
-	cylinder->col_r = ft_atoi(get_split_param(param[5], 0));
-	cylinder->col_g = ft_atoi(get_split_param(param[5], 1));
-	cylinder->col_b = ft_atoi(get_split_param(param[5], 2));
+	cylinder->col.r = ft_atoi(get_split_param(param[5], 0));
+	cylinder->col.g = ft_atoi(get_split_param(param[5], 1));
+	cylinder->col.b = ft_atoi(get_split_param(param[5], 2));
 }
 
 int	parse_cylinder(t_scene_data *data, char **param)

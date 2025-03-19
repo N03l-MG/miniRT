@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:05:08 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/18 11:27:42 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/19 18:02:56 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include "maths.h"
 
 //	Defines
-# define	WIDTH 1080
-# define	HEIGHT 720
+# define	WIDTH 1920
+# define	HEIGHT 1080
 
 //	Parsing
 void		parse_elements(t_scene_data *data, int fd);
@@ -42,9 +42,14 @@ void		key_hook(mlx_key_data_t keydata, void *param);
 //	Color
 uint32_t	col_rgb(int r, int g, int b, int a);
 uint32_t	merge_color(uint32_t col1, uint32_t col2, float val);
-int			get_r(uint32_t rgb);
-int			get_g(uint32_t rgb);
-int			get_b(uint32_t rgb);
+uint8_t		get_r(uint32_t rgb);
+uint8_t		get_g(uint32_t rgb);
+uint8_t		get_b(uint32_t rgb);
+t_color		tcol_rgb(int r, int g, int b, int a);
+uint32_t	merge_tcolor(t_color col1, t_color col2, float val);
+uint8_t		tget_r(t_color col);
+uint8_t		tget_g(t_color col);
+uint8_t		tget_b(t_color col);
 
 //	Rendering
 void		render_scene(t_scene_data *data);

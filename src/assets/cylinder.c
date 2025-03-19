@@ -6,49 +6,47 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:07:15 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/13 16:07:15 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/19 16:19:31 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static bool intersect_caps(t_cylinder *cyl, t_ray ray, double *t)
+static bool	intersect_caps(t_cylinder *cyl, t_ray ray, double *t)
 {
-	t_vector	center;
-	t_vector	axis;
-	double		radius;
-	double		denom;
-	t_vector	hit;
-	double		t_cap;
-	t_vector	top_center;
+    t_vector    center;
+    t_vector    axis;
+    double      radius;
+    double      t_cap;
+    t_vector    hit;
+    bool        hit_found;
 
-	center = vec_new(cyl->pos_x, cyl->pos_y, cyl->pos_z);
-	axis = vec_normalize(vec_new(cyl->vec_x, cyl->vec_y, cyl->vec_z));
-	radius = cyl->diameter / 2.0;
-	denom = vec_dot(ray.direction, axis);
-	if (fabs(denom) > 1e-6)
-	{
-		t_cap = vec_dot(vec_sub(center, ray.origin), axis) / denom;
-		hit = vec_add(ray.origin, vec_scale(ray.direction, t_cap));
-		if (t_cap > 0 && vec_length(vec_sub(hit, center)) <= radius)
-		{
-			*t = t_cap;
-			return (true);
-		}
-	}
-	top_center = vec_add(center, vec_scale(axis, cyl->height));
-	denom = vec_dot(ray.direction, axis);
-	if (fabs(denom) > 1e-6)
-	{
-		double t_cap = vec_dot(vec_sub(top_center, ray.origin), axis) / denom;
-		hit = vec_add(ray.origin, vec_scale(ray.direction, t_cap));
-		if (t_cap > 0 && vec_length(vec_sub(hit, top_center)) <= radius)
-		{
-			*t = t_cap;
-			return (true);
-		}
-	}
-	return (false);
+    center = vec_new(cyl->pos_x, cyl->pos_y, cyl->pos_z);
+    axis = vec_normalize(vec_new(cyl->vec_x, cyl->vec_y, cyl->vec_z));
+    radius = cyl->diameter / 2.0;
+    hit_found = false;
+    t_cap = vec_dot(vec_sub(center, ray.origin), axis) / vec_dot(ray.direction, axis);
+    if (t_cap > 0)
+    {
+        hit = vec_add(ray.origin, vec_scale(ray.direction, t_cap));
+        if (vec_length(vec_sub(hit, center)) <= radius)
+        {
+            *t = t_cap;
+            hit_found = true;
+        }
+    }
+    t_vector top_center = vec_add(center, vec_scale(axis, cyl->height));
+    t_cap = vec_dot(vec_sub(top_center, ray.origin), axis) / vec_dot(ray.direction, axis);
+    if (t_cap > 0 && (!hit_found || t_cap < *t))
+    {
+        hit = vec_add(ray.origin, vec_scale(ray.direction, t_cap));
+        if (vec_length(vec_sub(hit, top_center)) <= radius)
+        {
+            *t = t_cap;
+            hit_found = true;
+        }
+    }
+    return hit_found;
 }
 
 bool cylinder_intersect(t_cylinder *cyl, t_ray ray, double *t)
@@ -91,18 +89,28 @@ bool cylinder_intersect(t_cylinder *cyl, t_ray ray, double *t)
 
 t_vector	cylinder_normal(t_cylinder *cyl, t_vector point)
 {
-	t_vector	center;
-	t_vector	axis;
-	t_vector	cp;
+    t_vector    center;
+    t_vector    axis;
+    t_vector    cp;
+    t_vector    top_center;
+    float       dist_to_bottom;
+    float       dist_to_top;
 
-	center = vec_new(cyl->pos_x, cyl->pos_y, cyl->pos_z);
-	axis = vec_normalize(vec_new(cyl->vec_x, cyl->vec_y, cyl->vec_z));
-	cp = vec_sub(point, center);
-	if (fabs(vec_dot(cp, axis)) < 0.001f)
-		return (vec_scale(axis, -1.0));
-	if (fabs(vec_dot(vec_sub(point, 
-		vec_add(center, vec_scale(axis, cyl->height))), axis)) < 0.001f)
-		return (axis);
-	return (vec_normalize(vec_sub(point, vec_add(center,
-		vec_scale(axis, vec_dot(cp, axis))))));
+    center = vec_new(cyl->pos_x, cyl->pos_y, cyl->pos_z);
+    axis = vec_normalize(vec_new(cyl->vec_x, cyl->vec_y, cyl->vec_z));
+    top_center = vec_add(center, vec_scale(axis, cyl->height));
+    
+    // Check bottom cap
+    dist_to_bottom = fabs(vec_dot(vec_sub(point, center), axis));
+    if (dist_to_bottom < 0.001f)
+        return vec_scale(axis, -1.0f);
+    
+    // Check top cap
+    dist_to_top = fabs(vec_dot(vec_sub(point, top_center), axis));
+    if (dist_to_top < 0.001f)
+        return axis;
+    
+    // Side normal
+    cp = vec_sub(point, center);
+    return vec_normalize(vec_sub(cp, vec_scale(axis, vec_dot(cp, axis))));
 }

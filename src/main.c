@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:08:17 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/18 13:34:46 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/19 18:06:45 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	main(int ac, char **av)
 		fatal_error(ERR_FILE, NULL);
 	parse_elements(&data, fd);
 	close(fd);
+	data.samples = 80;
 	render_scene(&data);
 	return (0);
 }
