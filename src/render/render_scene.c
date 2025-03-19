@@ -67,38 +67,39 @@ static bool	is_occluded(t_scene_data *data, t_ray shadow_ray, float light_distan
 	return (false);
 }
 
-static t_vector	vec_random_in_sphere(float radius)
+static t_vector	rand_spread(float radius)
 {
-    t_vector	p;
-    do {
-        p = vec_new(
-            (rand() / (float)RAND_MAX) * 2.0f - 1.0f,
-            (rand() / (float)RAND_MAX) * 2.0f - 1.0f,
-            (rand() / (float)RAND_MAX) * 2.0f - 1.0f
-        );
-    } while (vec_length(p) > 1.0f);
-    return vec_scale(p, radius);
+	t_vector	p;
+	do {
+		p = vec_new(
+			(rand() / (float)RAND_MAX) * 2.0f - 1.0f,
+			(rand() / (float)RAND_MAX) * 2.0f - 1.0f,
+			(rand() / (float)RAND_MAX) * 2.0f - 1.0f
+		);
+	} while (vec_length(p) > 1.0f);
+	return vec_scale(p, radius);
 }
 
-static float	shadow_factor(t_scene_data *data, t_ray shadow_ray, t_light *light)
+static float	shadow_factor(t_scene_data *data, t_vector intersect, t_vector normal, t_light *light)
 {
-    int blocked_rays = 0;
-    int num_shadow_rays = 128;
-    float light_radius = 3.0f;
+	t_vector light_pos = vec_new(light->pos_x, light->pos_y, light->pos_z);
+	t_vector light_dir = vec_normalize(vec_sub(light_pos, intersect));
+	t_ray shadow_ray;
+	float light_distance = vec_length(vec_sub(light_pos, intersect));
+	shadow_ray.origin = vec_add(intersect, vec_scale(normal, 0.001f));
+	shadow_ray.direction = light_dir;
 
-    for (int i = 0; i < num_shadow_rays; i++)
-    {
-        t_vector random_point = vec_add(
-            vec_new(light->pos_x, light->pos_y, light->pos_z),
-            vec_random_in_sphere(light_radius)
-        );
-        t_vector new_direction = vec_normalize(vec_sub(random_point, shadow_ray.origin));
-        t_ray new_shadow_ray = { shadow_ray.origin, new_direction };
-        float light_distance = vec_length(vec_sub(random_point, shadow_ray.origin));
-        if (is_occluded(data, new_shadow_ray, light_distance))
-            blocked_rays++;
-    }
-    return 1.0f - ((float)blocked_rays / num_shadow_rays);
+	int samples = 140;
+	float shadow_intensity = 0.0f;
+	for (int i = 0; i < samples; i++)
+	{
+		t_vector jitter_pos = vec_add(light_pos, rand_spread(1.0f));
+		t_vector jitter_dir = vec_normalize(vec_sub(jitter_pos, intersect));
+		shadow_ray.direction = jitter_dir;
+		if (is_occluded(data, shadow_ray, light_distance))
+			shadow_intensity += 1.0f;
+	}
+	return (1.0f - (shadow_intensity / samples));
 }
 
 static uint32_t	ray_hit(t_scene_data *data, t_ray ray)
@@ -112,7 +113,6 @@ static uint32_t	ray_hit(t_scene_data *data, t_ray ray)
 	t_vector		intersect;
 	t_light			*light;
 	t_vector		light_dir;
-	t_ray			shadow_ray;
 
 	closest_t = INFINITY;
 	closest_obj = NULL;
@@ -161,9 +161,7 @@ static uint32_t	ray_hit(t_scene_data *data, t_ray ray)
 		return (col_rgb(0, 0, 0, 0xFF));
 	t_vector light_pos = vec_new(light->pos_x, light->pos_y, light->pos_z);
 	light_dir = vec_normalize(vec_sub(light_pos, intersect));
-	shadow_ray.origin = vec_add(intersect, vec_scale(normal, 0.001f));
-	shadow_ray.direction = light_dir;
-	float shadow_intensity = shadow_factor(data, shadow_ray, light);
+	float shadow_intensity = shadow_factor(data, intersect, normal, light);
 	float diffuse = fmax(vec_dot(normal, light_dir), 0.0f) * shadow_intensity;
 	switch (closest_type)
 	{
