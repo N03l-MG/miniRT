@@ -23,10 +23,7 @@ static bool	check_valid(t_plane *plane)
 {
 	if ((plane->vec_x < -1 || plane->vec_x > 1)
 		|| (plane->vec_y < -1 || plane->vec_y > 1)
-		|| (plane->vec_z < -1 || plane->vec_z > 1)
-		|| (plane->col.r < 0 || plane->col.r > 255)
-		|| (plane->col.g < 0 || plane->col.g > 255)
-		|| (plane->col.b < 0 || plane->col.b > 255))
+		|| (plane->vec_z < -1 || plane->vec_z > 1))
 		return (printlog(WARNING, "Invalid plane object parameters"), false);
 	return (true);
 }

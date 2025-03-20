@@ -21,10 +21,7 @@
 
 static bool	check_valid(t_light *light)
 {
-	if ((light->col.r < 0 || light->col.r > 255)
-		|| (light->col.g < 0 || light->col.g > 255)
-		|| (light->col.b < 0 || light->col.b > 255)
-		|| (light->brightness < 0 || light->brightness > 1))
+	if ((light->brightness < 0 || light->brightness > 1))
 		return (printlog(WARNING, "Invalid light object parameters"), false);
 	return (true);
 }

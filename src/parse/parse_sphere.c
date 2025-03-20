@@ -21,10 +21,7 @@
 
 static bool	check_valid(t_sphere *sphere)
 {
-	if ((sphere->col.r < 0 || sphere->col.r > 255)
-		|| (sphere->col.g < 0 || sphere->col.g > 255)
-		|| (sphere->col.b < 0 || sphere->col.b > 255)
-		|| (sphere->diameter < 0))
+	if ((sphere->diameter < 0))
 		return (printlog(WARNING, "Invalid sphere object parameters"), false);
 	return (true);
 }

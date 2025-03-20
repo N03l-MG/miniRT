@@ -20,8 +20,8 @@
 # include "maths.h"
 
 //	Defines
-# define	WIDTH 1920
-# define	HEIGHT 1080
+# define	WIDTH 1080
+# define	HEIGHT 750
 
 //	Parsing
 void		parse_elements(t_scene_data *data, int fd);
@@ -52,8 +52,14 @@ uint8_t		tget_g(t_color col);
 uint8_t		tget_b(t_color col);
 
 //	Rendering
+t_vector	get_intersect(t_ray ray, double t);
+t_light		*get_scene_light(t_scene_data *data);
+t_vector	surface_normal(void *obj, t_vector point, t_asset_type type);
+bool		is_occluded(t_scene_data *data, t_ray shadow_ray, float light_distance);
+float		shadow_caster(t_scene_data *data, t_vector intersect, t_vector normal, t_light *light);
+float		ambient_occlusion(t_scene_data *data, t_vector point, t_vector normal);
 void		render_scene(t_scene_data *data);
-void		draw_on_image(t_scene_data *data, mlx_image_t *img);
+void		draw_frame(t_scene_data *data, mlx_image_t *img);
 t_ray		camera_ray_for_pixel(t_camera *cam, float px, float py);
 void		camera_setup(t_camera *cam);
 

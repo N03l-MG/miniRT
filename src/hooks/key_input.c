@@ -99,18 +99,18 @@ static bool	sample_keys(mlx_key_data_t keydata, t_scene_data *data)
 {
 	if (keydata.key == MLX_KEY_KP_ADD && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 	{
-		if (data->samples < 128)
-			data->samples += 4;
+		if (data->samples < 112)
+			data->samples += 16;
 	}
 	else if (keydata.key == MLX_KEY_KP_SUBTRACT && (keydata.action == MLX_PRESS || keydata.action == MLX_REPEAT))
 	{
 		if (data->samples > 1)
-			data->samples -= 4;
+			data->samples -= 16;
 	}
 	else
 		return (false);
-	if (data->samples % 4 != 0)
-		data->samples = round(data->samples / 4) * 4;
+	if (data->samples % 16 != 0)
+		data->samples = round(data->samples / 16) * 16;
 	if (data->samples <= 0)
 		data->samples = 1;
 	printf(MAGENTA "Log: Shadow samples set to %i\n" RESET, data->samples);
@@ -127,6 +127,6 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 		|| sample_keys(keydata, data))
 	{
 		camera_setup(data->cam);
-		draw_on_image(data, data->window_data->mlx_image);
+		draw_frame(data, data->window_data->mlx_image);
 	}
 }

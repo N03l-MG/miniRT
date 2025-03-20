@@ -20,10 +20,7 @@
 
 static void	check_valid(t_scene_data *data)
 {
-	if ((data->ambient->col.r < 0 || data->ambient->col.r > 255)
-		|| (data->ambient->col.g < 0 || data->ambient->col.g > 255)
-		|| (data->ambient->col.b < 0 || data->ambient->col.b > 255)
-		|| (data->ambient->ratio < 0 || data->ambient->ratio > 1))
+	if ((data->ambient->ratio < 0 || data->ambient->ratio > 1))
 		fatal_error(ERR_DATA, NULL);
 }
 

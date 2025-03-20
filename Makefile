@@ -24,6 +24,8 @@ MLX = ./MLX42/build/libmlx42.a
 GREEN = \033[0;32m
 RESET = \033[0m
 
+MAKEFLAGS += --no-print-directory
+
 ifeq ($(shell uname), Darwin)
 	MLX_FLAGS = -ldl -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/" -pthread -lm
 else ifeq ($(shell uname), Linux)
@@ -49,8 +51,8 @@ SRCS = main.c \
 	   parse/parse_main.c parse/parse_light.c parse/parse_plane.c parse/parse_sphere.c \
 	   parse/parse_cylinder.c parse/parse_utils.c parse/parse_ambience.c parse/parse_cam.c \
 	   maintainance/logging.c maintainance/error.c maintainance/cleanup.c \
-	   render/render_scene.c render/camera.c \
-	   color/color.c color/tcolor.c\
+	   render/render_scene.c render/camera.c render/shadows.c render/render_utils.c \
+	   color/color.c \
 	   hooks/key_input.c \
 	   math/vector.c math/calculation.c \
 	   assets/plane.c assets/sphere.c assets/cylinder.c
@@ -80,7 +82,7 @@ message:
 	@printf "Compiling $(NAME)\n"
 
 mlx_lib:
-	@cd MLX42 && cmake -B build && make -C build -j4
+	@cd MLX42 && CMAKE_MAKE_FLAGS="--no-print-directory" cmake -B build && $(MAKE) -C build -j4
 
 ft_lib:
 	@$(MAKE) -C libft
