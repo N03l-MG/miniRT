@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:45:06 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/19 18:06:10 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/20 16:13:30 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,13 @@ static uint32_t	trace_ray(t_scene_data *data, t_ray ray)
     
     return (col_rgb(
         fmin((closest_node->col.r * ambient_light) + 
-             (closest_node->col.r * diffuse * light->brightness + 
+             (closest_node->col.r * diffuse * light->brightness * (light->col.r / 255.0f) + 
               data->ambient->col.r * ambient_light), 0xFF),
         fmin((closest_node->col.g * ambient_light) + 
-             (closest_node->col.g * diffuse * light->brightness + 
+             (closest_node->col.g * diffuse * light->brightness * (light->col.g / 255.0f) + 
               data->ambient->col.g * ambient_light), 0xFF),
         fmin((closest_node->col.b * ambient_light) + 
-             (closest_node->col.b * diffuse * light->brightness + 
+             (closest_node->col.b * diffuse * light->brightness * (light->col.b / 255.0f) + 
               data->ambient->col.b * ambient_light), 0xFF),
         0xFF));
 }
@@ -97,13 +97,13 @@ void	draw_frame(t_scene_data *data, mlx_image_t *img)
 
 	camera_setup(data->cam);
 	i = -1;
-	while (++i < WIDTH)
+	while (++i < HEIGHT)
 	{
 		j = -1;
-		while (++j < HEIGHT)
+		while (++j < WIDTH)
 		{
-			ray = camera_ray_for_pixel(data->cam, i, j);
-			mlx_put_pixel(img, i, j, trace_ray(data, ray));
+			ray = camera_ray_for_pixel(data->cam, j, i);
+			mlx_put_pixel(img, j, i, trace_ray(data, ray));
 		}
 	}
 }
@@ -115,7 +115,6 @@ void	render_scene(t_scene_data *data)
 	window_data.mlx_window = mlx_init(WIDTH, HEIGHT, "miniRT", false);
 	if (!window_data.mlx_window)
 		fatal_error(ERR_WINDOW, &window_data);
-	window_data.mlx_image = mlx_new_image(window_data.mlx_window, WIDTH, HEIGHT);
 	window_data.mlx_image = mlx_new_image(window_data.mlx_window, WIDTH, HEIGHT);
 	if (!window_data.mlx_image)
 		fatal_error(ERR_IMAGE, &window_data);
