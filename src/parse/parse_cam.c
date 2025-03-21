@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/20 16:07:38 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/21 14:44:15 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	set_params(t_camera *cam, char **param)
 	cam->pos_y = ft_atof(get_split_param(param[1], 1));
 	cam->pos_z = ft_atof(get_split_param(param[1], 2));
 	cam->vec_x = ft_atof(get_split_param(param[2], 0));
-	cam->vec_y = -ft_atof(get_split_param(param[2], 1));
+	cam->vec_y = ft_atof(get_split_param(param[2], 1));
 	cam->vec_z = ft_atof(get_split_param(param[2], 2));
 	cam->fov = ft_atof(param[3]);
 }

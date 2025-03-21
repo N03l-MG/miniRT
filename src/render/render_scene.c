@@ -6,7 +6,7 @@
 /*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:45:06 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/20 16:13:30 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/21 18:26:00 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,18 +75,19 @@ static uint32_t	trace_ray(t_scene_data *data, t_ray ray)
 	float ao = ambient_occlusion(data, intersect, normal);
     float ambient_light = data->ambient->ratio * ao;
     float diffuse = fmax(vec_dot(normal, light_dir), 0.0f) * shadow_intensity;
-    
+    float specular = pow(fmax(vec_dot(vec_normalize(vec_sub(ray.origin, intersect)),
+		vec_sub(vec_scale(light_dir, -1), vec_scale(normal, 2 * vec_dot(vec_scale(light_dir, -1), normal)))), 0.0f), 32) * shadow_intensity;
     return (col_rgb(
-        fmin((closest_node->col.r * ambient_light) + 
-             (closest_node->col.r * diffuse * light->brightness * (light->col.r / 255.0f) + 
-              data->ambient->col.r * ambient_light), 0xFF),
-        fmin((closest_node->col.g * ambient_light) + 
-             (closest_node->col.g * diffuse * light->brightness * (light->col.g / 255.0f) + 
-              data->ambient->col.g * ambient_light), 0xFF),
-        fmin((closest_node->col.b * ambient_light) + 
-             (closest_node->col.b * diffuse * light->brightness * (light->col.b / 255.0f) + 
-              data->ambient->col.b * ambient_light), 0xFF),
-        0xFF));
+		fmin((closest_node->col.r * ambient_light) + 
+			(closest_node->col.r * diffuse * light->brightness * (light->col.r / 255.0f))
+			+ (light->col.r * specular * light->brightness * shadow_intensity), 0xFF),
+		fmin((closest_node->col.g * ambient_light) + 
+			(closest_node->col.g * diffuse * light->brightness * (light->col.g / 255.0f))
+			+ (light->col.g * specular * light->brightness * shadow_intensity), 0xFF),
+		fmin((closest_node->col.b * ambient_light) + 
+			(closest_node->col.b * diffuse * light->brightness * (light->col.b / 255.0f))
+			+ (light->col.b * specular * light->brightness * shadow_intensity), 0xFF),
+		0xFF));
 }
 
 void	draw_frame(t_scene_data *data, mlx_image_t *img)

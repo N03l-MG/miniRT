@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 14:27:01 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/18 17:15:02 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/21 18:23:48 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,12 @@ uint32_t	merge_color(uint32_t col1, uint32_t col2, float val)
 	g = get_g(col1) + (get_g(col2) - get_g(col1)) * val;
 	b = get_b(col1) + (get_b(col2) - get_b(col1)) * val;
 	return (col_rgb(r, g, b, 0xFF));
+}
+
+float	color_diff(uint32_t c1, uint32_t c2)
+{
+    float dr = ((c1 >> 24) & 0xFF) - ((c2 >> 24) & 0xFF) / 255.0f;
+    float dg = ((c1 >> 16) & 0xFF) - ((c2 >> 16) & 0xFF) / 255.0f;
+    float db = ((c1 >> 8) & 0xFF) - ((c2 >> 8) & 0xFF) / 255.0f;
+    return (dr + dg + db) / 3.0f;
 }
