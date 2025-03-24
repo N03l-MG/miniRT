@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/18 16:47:43 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/24 14:55:36 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,12 @@ static bool	check_valid(t_cylinder *cylinder)
 		|| (cylinder->vec_y < -1 || cylinder->vec_y > 1)
 		|| (cylinder->vec_z < -1 || cylinder->vec_z > 1)
 		|| (cylinder->diameter < 0)
-		|| (cylinder->height < 0))
+		|| (cylinder->height < 0)
+		|| (cylinder->roughness < 0 || cylinder->roughness > 1)
+		|| (cylinder->reflect < 0 || cylinder->reflect > 1)
+		|| (cylinder->col.r < 0 || cylinder->col.r > 255)
+		|| (cylinder->col.g < 0 || cylinder->col.g > 255)
+		|| (cylinder->col.b < 0 || cylinder->col.b > 255))
 		return (printlog(WARNING, "Invalid cylinder object parameters"), false);
 	return (true);
 }
@@ -57,6 +62,8 @@ static void	add_cylinder(t_assets *assets, t_cylinder *new_cylinder)
 
 static void	set_params(t_cylinder *cylinder, char **param)
 {
+	cylinder->roughness = DEFAULT_ROUGHNESS;
+	cylinder->reflect = DEFAULT_REFLECT;
 	cylinder->pos_x = ft_atof(get_split_param(param[1], 0));
 	cylinder->pos_y = ft_atof(get_split_param(param[1], 1));
 	cylinder->pos_z = ft_atof(get_split_param(param[1], 2));
@@ -68,13 +75,18 @@ static void	set_params(t_cylinder *cylinder, char **param)
 	cylinder->col.r = ft_atoi(get_split_param(param[5], 0));
 	cylinder->col.g = ft_atoi(get_split_param(param[5], 1));
 	cylinder->col.b = ft_atoi(get_split_param(param[5], 2));
+	if (get_number_of_split_elements(param) >= 7)
+		cylinder->roughness = ft_atof(param[6]);
+	if (get_number_of_split_elements(param) >= 8)
+		cylinder->reflect = ft_atof(param[7]);
 }
 
 int	parse_cylinder(t_scene_data *data, char **param)
 {
 	t_cylinder	*new_cylinder;
 
-	if (get_number_of_split_elements(param) != 6)
+	if (get_number_of_split_elements(param) < 7
+		&& get_number_of_split_elements(param) > 8)
 		return (printlog(WARNING, "Invalid cylinder configuration."), 0);
 	if (get_number_of_splits(param[1], ',') != 3)
 		return (printlog(WARNING, "Invalid cylinder object position."), 0);

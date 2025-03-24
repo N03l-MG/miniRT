@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/24 10:55:15 by jgraf             #+#    #+#             */
+/*   Updated: 2025/03/24 12:55:15 by jgraf            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "miniRT.h"
 
 t_vector	get_intersect(t_ray ray, double t)
 {
-	return vec_add(ray.origin, vec_scale(ray.direction, t));
+	return (vec_add(ray.origin, vec_scale(ray.direction, t)));
 }
 
 t_light	*get_scene_light(t_scene_data *data)
@@ -38,18 +50,18 @@ bool	is_occluded(t_scene_data *data, t_ray shadow_ray, float light_distance)
 	node = data->assets->head;
 	while (node)
 	{
-		if (node->type == ASS_PLANE)
-			if (plane_intersect((t_plane *)node->asset_struct, shadow_ray, &t) 
-				&& t > 0.001f && t < light_distance)
-				return (true);
-		if (node->type == ASS_SPHERE)
-			if (sphere_intersect((t_sphere *)node->asset_struct, shadow_ray, &t) 
-				&& t > 0.001f && t < light_distance)
-				return (true);
-		if (node->type == ASS_CYLINDER)
-			if (cylinder_intersect((t_cylinder *)node->asset_struct, shadow_ray, &t) 
-				&& t > 0.001f && t < light_distance)
-				return (true);
+		if (node->type == ASS_PLANE
+			&& (plane_hit((t_plane *)node->asset_struct, shadow_ray, &t)
+				&& t > 0.001f && t < light_distance))
+			return (true);
+		else if (node->type == ASS_SPHERE
+			&& (sphere_hit((t_sphere *)node->asset_struct, shadow_ray, &t)
+				&& t > 0.001f && t < light_distance))
+			return (true);
+		else if (node->type == ASS_CYLINDER
+			&& (cylinder_hit((t_cylinder *)node->asset_struct, shadow_ray, &t)
+				&& t > 0.001f && t < light_distance))
+			return (true);
 		node = node->next;
 	}
 	return (false);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 12:30:38 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/19 17:56:52 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/24 14:14:46 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ typedef struct s_asset_node
 	void				*asset_struct;
 	t_asset_type		type;
 	t_color				col;
+	float				roughness;
+	float				reflect;
 	struct s_asset_node	*next;
 }	t_asset_node;
 

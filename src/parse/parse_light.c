@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/18 15:59:11 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/21 16:03:17 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@
 
 static bool	check_valid(t_light *light)
 {
-	if ((light->brightness < 0 || light->brightness > 1))
+	if ((light->brightness < 0 || light->brightness > 1)
+		|| (light->col.r < 0 || light->col.r > 255)
+		|| (light->col.g < 0 || light->col.g > 255)
+		|| (light->col.b < 0 || light->col.b > 255))
 		return (printlog(WARNING, "Invalid light object parameters"), false);
 	return (true);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   calculation.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 16:59:54 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/14 17:46:00 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/24 09:02:51 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,14 @@ float	fast_inverse_sqrt(float number)
 	return (bits.f);
 }
 
-bool	solve_quadratic(float a, float b, float c, float *t0, float *t1)
+bool	solve_quadratic(float a, float b, float c, t_quad *t)
 {
 	float	discriminant;
-	float	temp;
 
 	discriminant = (b * b) - 4 * (a * c);
 	if (discriminant < 0)
 		return (false);
-	*t0 = (-b - sqrt(discriminant)) / (2.0 * a);
-	*t1 = (-b + sqrt(discriminant)) / (2.0 * a);
-	if (*t0 > *t1)
-	{
-		temp = *t0;
-		*t0 = *t1;
-		*t1 = temp;
-	}
+	t->t0 = (-b - sqrt(discriminant)) / (2.0 * a);
+	t->t1 = (-b + sqrt(discriminant)) / (2.0 * a);
 	return (true);
 }

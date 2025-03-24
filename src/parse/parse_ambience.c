@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/18 15:47:27 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/24 16:30:17 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@
 
 static void	check_valid(t_scene_data *data)
 {
-	if ((data->ambient->ratio < 0 || data->ambient->ratio > 1))
+	if ((data->ambient->ratio < 0 || data->ambient->ratio > 1)
+		|| (data->ambient->col.r < 0 || data->ambient->col.r > 255)
+		|| (data->ambient->col.g < 0 || data->ambient->col.g > 255)
+		|| (data->ambient->col.b < 0 || data->ambient->col.b > 255))
 		fatal_error(ERR_DATA, NULL);
 }
 
@@ -38,6 +41,8 @@ void	parse_ambience(t_scene_data *data, char **param)
 		fatal_error(ERR_DATA, NULL);
 	if (data->ambient == NULL)
 		data->ambient = gc_malloc(sizeof(t_ambient));
+	else
+		printlog(LOG, "Ambient already exists... Replacing ambient.");
 	if (get_number_of_splits(param[2], ',') != 3)
 		fatal_error(ERR_DATA, NULL);
 	set_params(data->ambient, param);

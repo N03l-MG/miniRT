@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cam.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/21 14:44:15 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/24 16:29:15 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static void	check_valid(t_scene_data *data)
 {
 	if (data->cam->fov < 0 || data->cam->fov > 180)
 		fatal_error(ERR_DATA, NULL);
-	// Check if direction vector is zero
 	if (data->cam->vec_x == 0 && data->cam->vec_y == 0 && data->cam->vec_z == 0)
 		fatal_error(ERR_DATA, NULL);
 }
@@ -44,6 +43,8 @@ void	parse_camera(t_scene_data *data, char **param)
 		fatal_error(ERR_DATA, NULL);
 	if (data->cam == NULL)
 		data->cam = gc_malloc(sizeof(t_camera));
+	else
+		printlog(LOG, "Camera already exists... Replacing camera.");
 	if (get_number_of_splits(param[1], ',') != 3)
 		fatal_error(ERR_DATA, NULL);
 	if (get_number_of_splits(param[2], ',') != 3)

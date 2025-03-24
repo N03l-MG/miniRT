@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/18 15:59:09 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/24 14:55:25 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,12 @@
 
 static bool	check_valid(t_sphere *sphere)
 {
-	if ((sphere->diameter < 0))
+	if ((sphere->diameter < 0)
+		|| (sphere->roughness < 0 || sphere->roughness > 1)
+		|| (sphere->reflect < 0 || sphere->reflect > 1)
+		|| (sphere->col.r < 0 || sphere->col.r > 255)
+		|| (sphere->col.g < 0 || sphere->col.g > 255)
+		|| (sphere->col.b < 0 || sphere->col.b > 255))
 		return (printlog(WARNING, "Invalid sphere object parameters"), false);
 	return (true);
 }
@@ -53,6 +58,8 @@ static void	add_sphere(t_assets *assets, t_sphere *new_sphere)
 
 static void	set_params(t_sphere *sphere, char **param)
 {
+	sphere->roughness = DEFAULT_ROUGHNESS;
+	sphere->reflect = DEFAULT_REFLECT;
 	sphere->pos_x = ft_atof(get_split_param(param[1], 0));
 	sphere->pos_y = ft_atof(get_split_param(param[1], 1));
 	sphere->pos_z = ft_atof(get_split_param(param[1], 2));
@@ -60,13 +67,18 @@ static void	set_params(t_sphere *sphere, char **param)
 	sphere->col.r = ft_atoi(get_split_param(param[3], 0));
 	sphere->col.g = ft_atoi(get_split_param(param[3], 1));
 	sphere->col.b = ft_atoi(get_split_param(param[3], 2));
+	if (get_number_of_split_elements(param) >= 5)
+		sphere->roughness = ft_atof(param[4]);
+	if (get_number_of_split_elements(param) >= 6)
+		sphere->reflect = ft_atof(param[5]);
 }
 
 int	parse_sphere(t_scene_data *data, char **param)
 {
 	t_sphere	*new_sphere;
 
-	if (get_number_of_split_elements(param) != 4)
+	if (get_number_of_split_elements(param) < 5
+		&& get_number_of_split_elements(param) > 6)
 		return (printlog(WARNING, "Invalid sphere configuration."), 0);
 	if (get_number_of_splits(param[1], ',') != 3)
 		return (printlog(WARNING, "Invalid sphere object position."), 0);

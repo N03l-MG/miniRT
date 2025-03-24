@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:43:08 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/18 16:58:58 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/24 08:36:40 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,3 +24,4 @@ void	clean_exit(int status, t_window_data *window_data)
 	gc_collect();
 	exit(status);
 }
+//system("leaks miniRT"); // add as needed

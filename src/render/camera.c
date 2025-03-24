@@ -3,55 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/14 17:16:05 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/14 17:45:01 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/24 11:42:12 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-static t_vector calculate_pixel_position(t_camera *cam, float px, float py)
+static t_vector	calculate_pixel_position(t_camera *cam, float px, float py)
 {
-    t_vector pixel;
-    float aspect_ratio = (float)WIDTH / (float)HEIGHT;
-    float fov_adjustment = tan(cam->fov * M_PI / 360.0);
-    float x_offset = (2 * ((px + 0.5) / WIDTH) - 1) * aspect_ratio * fov_adjustment;
-    float y_offset = (1 - 2 * ((py + 0.5) / HEIGHT)) * fov_adjustment;
-    
-    // Create direction vector from camera orientation
-    t_vector direction = vec_normalize(vec_new(cam->vec_x, cam->vec_y, cam->vec_z));
-    t_vector up = vec_new(0, 1, 0);
-    t_vector right = vec_normalize(vec_cross(direction, up));
-    up = vec_cross(right, direction);
+	float		fov_adjustment;
+	float		x_offset;
+	float		y_offset;
+	t_vector	direction;
+	t_vector	right;
 
-    // Combine the offset with the camera basis vectors
-    pixel = vec_add(direction, 
-            vec_add(vec_scale(right, x_offset), 
-                   vec_scale(up, y_offset)));
-    
-    return vec_normalize(pixel);
+	fov_adjustment = tan(cam->fov * M_PI / 360.0);
+	x_offset = (2 * ((px + 0.5) / WIDTH) - 1) * ((float)WIDTH / (float)HEIGHT)
+		* fov_adjustment;
+	y_offset = (1 - 2 * ((py + 0.5) / HEIGHT)) * fov_adjustment;
+	direction = vec_normalize(vec_new(cam->vec_x, cam->vec_y, cam->vec_z));
+	right = vec_normalize(vec_cross(direction, vec_new(0, 1, 0)));
+	return (vec_normalize(vec_add(direction, vec_add(vec_scale(right, x_offset),
+					vec_scale(vec_cross(right, direction), y_offset)))));
 }
 
-void    camera_setup(t_camera *cam)
+void	camera_setup(t_camera *cam)
 {
-    // Normalize the camera's orientation vector
-    t_vector direction = vec_normalize(vec_new(cam->vec_x, cam->vec_y, cam->vec_z));
-    
-    // Update camera's orientation vector with normalized values
-    cam->vec_x = direction.x;
-    cam->vec_y = direction.y;
-    cam->vec_z = direction.z;
+	t_vector	direction;
+
+	direction = vec_normalize(vec_new(cam->vec_x, cam->vec_y, cam->vec_z));
+	cam->vec_x = direction.x;
+	cam->vec_y = direction.y;
+	cam->vec_z = direction.z;
 }
 
-t_ray camera_ray_for_pixel(t_camera *cam, float px, float py)
+t_ray	camera_ray_for_pixel(t_camera *cam, float px, float py)
 {
-    t_ray ray;
-    
-    ray.origin = vec_new(cam->pos_x, cam->pos_y, cam->pos_z);
-    ray.direction = calculate_pixel_position(cam, px, py);
-    
-    return ray;
-}
+	t_ray	ray;
 
+	ray.origin = vec_new(cam->pos_x, cam->pos_y, cam->pos_z);
+	ray.direction = calculate_pixel_position(cam, px, py);
+	return (ray);
+}

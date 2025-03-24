@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:49:10 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/19 17:54:02 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/24 16:02:12 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	check_valid(t_scene_data *data)
 		fatal_error(ERR_AMBIENT, NULL);
 	else if (data->cam == NULL)
 		fatal_error(ERR_CAM, NULL);
-	else if (data->assets->light_cnt > 1)
+	else if (data->assets->light_cnt != 1)
 		fatal_error(ERR_LIGHT, NULL);
 }
 
@@ -75,12 +75,8 @@ static void	pass_color_to_parent(t_assets *assets)
 	{
 		if (current->type == ASS_LIGHT)
 			current->col = ((t_light *)current->asset_struct)->col;
-		else if (current->type == ASS_PLANE)
-			current->col = ((t_plane *)current->asset_struct)->col;
-		else if (current->type == ASS_SPHERE)
-			current->col = ((t_sphere *)current->asset_struct)->col;
-		else if (current->type == ASS_CYLINDER)
-			current->col = ((t_cylinder *)current->asset_struct)->col;
+		else
+			assign_properties(current, current->asset_struct, current->type);
 		current = current->next;
 	}
 }
@@ -97,16 +93,17 @@ void	parse_elements(t_scene_data *data, int fd)
 		trimmed = ft_strtrim(line, "\n");
 		if (ft_strncmp(line, "\n", 1) == 0)
 		{
-			free(line);
-			free(trimmed);
+			gc_free(line);
+			gc_free(trimmed);
 			line = get_next_line(fd);
 			continue ;
 		}
 		call_element(data, trimmed);
-		free(line);
-		free(trimmed);
+		gc_free(line);
+		gc_free(trimmed);
 		line = get_next_line(fd);
 	}
 	check_valid(data);
+	printlog(LOG, "Scene setup successful.");
 	pass_color_to_parent(data->assets);
 }

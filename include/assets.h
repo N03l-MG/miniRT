@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assets.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 14:39:14 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/19 17:54:49 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/24 14:14:33 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ typedef struct s_light
 	t_color	col;
 }	t_light;
 
-
 // Object Assets
 typedef struct s_sphere
 {
@@ -50,6 +49,8 @@ typedef struct s_sphere
 	float	pos_y;
 	float	pos_z;
 	float	diameter;
+	float	roughness;
+	float	reflect;
 	t_color	col;
 }	t_sphere;
 
@@ -61,6 +62,8 @@ typedef struct s_plane
 	float	vec_x;
 	float	vec_y;
 	float	vec_z;
+	float	roughness;
+	float	reflect;
 	t_color	col;
 }	t_plane;
 
@@ -74,6 +77,8 @@ typedef struct s_cylinder
 	float	vec_z;
 	float	diameter;
 	float	height;
+	float	roughness;
+	float	reflect;
 	t_color	col;
 }	t_cylinder;
 

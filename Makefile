@@ -47,16 +47,15 @@ vpath %.c $(SOURCES)
 ###############                    SOURCE FILES                  ###############
 ################################################################################
 
-SRCS = main.c \
-	   parse/parse_main.c parse/parse_light.c parse/parse_plane.c parse/parse_sphere.c \
-	   parse/parse_cylinder.c parse/parse_utils.c parse/parse_ambience.c parse/parse_cam.c \
-	   maintainance/logging.c maintainance/error.c maintainance/cleanup.c \
-	   render/render_scene.c render/camera.c render/shadows.c render/render_utils.c \
-	   color/color.c \
-	   hooks/key_input.c \
-	   math/vector.c math/calculation.c \
-	   assets/plane.c assets/sphere.c assets/cylinder.c
+PARSE_SRC = $(addprefix parse/, parse_main.c parse_light.c parse_plane.c parse_sphere.c parse_cylinder.c parse_utils.c parse_ambience.c parse_cam.c)
+MAINTAINANCE_SRC = $(addprefix maintainance/, logging.c error.c cleanup.c)
+RENDER_SRC = $(addprefix render/, render_scene.c camera.c shadows.c render_utils.c draw_window.c lighting.c reflection.c)
+COLOR_SRC = $(addprefix color/, color.c)
+HOOKS_SRC = $(addprefix hooks/, key_input.c translation_input.c rotation_input.c sample_input.c)
+MATH_SRC = $(addprefix math/, vector.c vector2.c calculation.c)
+ASSETS_SRC = $(addprefix assets/, plane.c sphere.c cylinder.c cylinder_cap.c)
 
+SRCS = $(addprefix src/, main.c $(PARSE_SRC) $(MAINTAINANCE_SRC) $(RENDER_SRC) $(COLOR_SRC) $(HOOKS_SRC) $(MATH_SRC) $(ASSETS_SRC))
 OBJ = $(addprefix $(OBJECTS)/, $(SRCS:.c=.o))
 
 ################################################################################

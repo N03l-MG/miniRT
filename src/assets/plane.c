@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   plane.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 16:07:08 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/20 14:54:37 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/24 12:55:16 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-bool	plane_intersect(t_plane *plane, t_ray ray, double *t)
+bool	plane_hit(t_plane *plane, t_ray ray, double *t)
 {
 	t_vector	plane_normal;
 	t_vector	plane_point;
@@ -24,7 +24,7 @@ bool	plane_intersect(t_plane *plane, t_ray ray, double *t)
 	plane_point = vec_new(plane->pos_x, plane->pos_y, plane->pos_z);
 	denom = vec_dot(ray.direction, plane_normal);
 	if (fabs(denom) < 1e-6)
-		return false;
+		return (false);
 	numer = vec_dot(vec_sub(plane_point, ray.origin), plane_normal);
 	*t = numer / denom;
 	return (*t >= 0);
@@ -32,5 +32,5 @@ bool	plane_intersect(t_plane *plane, t_ray ray, double *t)
 
 t_vector	plane_normal(t_plane *plane)
 {
-	return vec_normalize(vec_new(plane->vec_x, plane->vec_y, plane->vec_z));
+	return (vec_normalize(vec_new(plane->vec_x, plane->vec_y, plane->vec_z)));
 }

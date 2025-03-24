@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:45:39 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/14 08:27:44 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/24 15:34:48 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 /*	These are the parsing utils. These are used to check the number of splits
 *	possible for each section of the input (123,321,52 -> 3 split values for
 *	a ',' delimiter).
+*	As well as freeing split elements.
+*	Because of the 42 norm rules I can not have more than 5 functions in a
+*	single file, therefore I need to put assign_properties() in here.
 */
 
 void	free_split(char **splt)
@@ -70,4 +73,26 @@ char	*get_split_param(char *str, int i)
 	trimmed = ft_strtrim(param[i], " ");
 	free_split(param);
 	return (trimmed);
+}
+
+void	assign_properties(t_asset_node *current, void *asset, int type)
+{
+	if (type == ASS_PLANE)
+	{
+		current->col = ((t_plane *)asset)->col;
+		current->roughness = ((t_plane *)asset)->roughness;
+		current->reflect = ((t_plane *)asset)->reflect;
+	}
+	else if (type == ASS_SPHERE)
+	{
+		current->col = ((t_sphere *)asset)->col;
+		current->roughness = ((t_sphere *)asset)->roughness;
+		current->reflect = ((t_sphere *)asset)->reflect;
+	}
+	else if (type == ASS_CYLINDER)
+	{
+		current->col = ((t_cylinder *)asset)->col;
+		current->roughness = ((t_cylinder *)asset)->roughness;
+		current->reflect = ((t_cylinder *)asset)->reflect;
+	}
 }
