@@ -36,3 +36,18 @@ bool	solve_quadratic(float a, float b, float c, t_quad *t)
 	t->t1 = (-b + sqrt(discriminant)) / (2.0 * a);
 	return (true);
 }
+
+int	ft_rand(void)
+{
+	static unsigned int	*seed;
+
+	if (!seed)
+	{
+		seed = (unsigned int *)gc_malloc(sizeof(unsigned int));
+		if (!seed)
+			return (0);
+		*seed = 42;
+	}
+	*seed = (1103515245 * *seed + 12345) % (1U << 31);
+	return ((int)(*seed & 0x7FFFFFFF));
+}

@@ -17,16 +17,16 @@ static t_vector	rand_spread(float radius)
 	t_vector	p;
 
 	p = vec_new(
-			(rand() / (float)RAND_MAX) * 2.0f - 1.0f,
-			(rand() / (float)RAND_MAX) * 2.0f - 1.0f,
-			(rand() / (float)RAND_MAX) * 2.0f - 1.0f
+			(ft_rand() / (float)RAND_MAX) * 2.0f - 1.0f,
+			(ft_rand() / (float)RAND_MAX) * 2.0f - 1.0f,
+			(ft_rand() / (float)RAND_MAX) * 2.0f - 1.0f
 			);
 	while (vec_length(p) > 1.0f)
 	{
 		p = vec_new(
-				(rand() / (float)RAND_MAX) * 2.0f - 1.0f,
-				(rand() / (float)RAND_MAX) * 2.0f - 1.0f,
-				(rand() / (float)RAND_MAX) * 2.0f - 1.0f
+				(ft_rand() / (float)RAND_MAX) * 2.0f - 1.0f,
+				(ft_rand() / (float)RAND_MAX) * 2.0f - 1.0f,
+				(ft_rand() / (float)RAND_MAX) * 2.0f - 1.0f
 				);
 	}
 	return (vec_scale(p, radius));

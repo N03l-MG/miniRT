@@ -38,7 +38,7 @@ t_vector	vec_normalize(t_vector v)
 
 static float	rand_range(float min, float max)
 {
-	return (min + (max - min) * ((float)rand() / RAND_MAX));
+	return (min + (max - min) * ((float)ft_rand() / RAND_MAX));
 }
 
 t_vector	vec_random(float min, float max)

@@ -68,5 +68,6 @@ t_vector	vec_random(float min, float max);
 // Math calculations
 float		fast_inverse_sqrt(float number);
 bool		solve_quadratic(float a, float b, float c, t_quad *t);
+int			ft_rand(void);
 
 #endif
