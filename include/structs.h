@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 12:30:38 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/24 14:14:46 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/31 12:39:18 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ typedef enum e_error
 
 typedef enum e_asset_type
 {
-	ASS_LIGHT,
-	ASS_PLANE,
-	ASS_SPHERE,
-	ASS_CYLINDER,
+	AST_LIGHT,
+	AST_PLANE,
+	AST_SPHERE,
+	AST_CYLINDER,
 	NO_TYPE
 }	t_asset_type;
 

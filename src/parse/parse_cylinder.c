@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cylinder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/24 14:55:36 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/31 12:43:25 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,10 @@ static void	add_cylinder(t_assets *assets, t_cylinder *new_cylinder)
 	if (!check_valid(new_cylinder))
 		return ;
 	new_node = gc_malloc(sizeof(t_asset_node));
+	if (!new_node)
+		fatal_error(ERR_MEMORY, NULL);
 	new_node->asset_struct = new_cylinder;
-	new_node->type = ASS_CYLINDER;
+	new_node->type = AST_CYLINDER;
 	new_node->next = NULL;
 	if (assets->head == NULL)
 		assets->head = new_node;
@@ -95,6 +97,8 @@ int	parse_cylinder(t_scene_data *data, char **param)
 	if (get_number_of_splits(param[5], ',') != 3)
 		return (printlog(WARNING, "Invalid cylinder color."), 0);
 	new_cylinder = gc_malloc(sizeof(t_cylinder));
+	if (!new_cylinder)
+		fatal_error(ERR_MEMORY, NULL);
 	set_params(new_cylinder, param);
 	add_cylinder(data->assets, new_cylinder);
 	return (1);

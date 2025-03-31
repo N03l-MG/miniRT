@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:05:08 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/24 16:38:29 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/26 12:00:46 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,25 @@
 # include "render.h"
 
 //	Defines
-# define DEFAULT_ROUGHNESS 0.5
+# define WIDTH 960
+# define HEIGHT 544
+# define SHDW_SAMPLES 48
+# define MAX_REFLECT 2
+# define DEFAULT_ROUGHNESS 0.6
 # define DEFAULT_REFLECT 0.2
 
+//	This configuration will allow you to move somewhat smoothly
 //# define WIDTH 320
 //# define HEIGHT 240
 //# define SHDW_SAMPLES 1
-//# define MAX_REFLECT 0
-# define WIDTH 1080
-# define HEIGHT 720
-# define SHDW_SAMPLES 80
-# define MAX_REFLECT 2
+//# define MAX_REFLECT 1
 
 //	Parsing
 void		parse_elements(t_scene_data *data, int fd);
 void		parse_ambience(t_scene_data *data, char **param);
 void		parse_camera(t_scene_data *data, char **param);
 int			parse_light(t_scene_data *data, char **param);
+int			create_dark_light(t_scene_data *data);
 int			parse_sphere(t_scene_data *data, char **param);
 int			parse_plane(t_scene_data *data, char **param);
 int			parse_cylinder(t_scene_data *data, char **param);
@@ -61,6 +63,16 @@ int			get_g(uint32_t rgb);
 int			get_b(uint32_t rgb);
 
 //	Rendering
+void		render_scene(t_scene_data *data);
+void		draw_frame(t_scene_data *data, mlx_image_t *img);
+void		camera_setup(t_camera *cam);
+t_ray		camera_ray_for_pixel(t_camera *cam, float px, float py);
+uint32_t	trace_ray(t_scene_data *data, t_ray ray, int depth);
+uint32_t	add_reflection(t_render *render, t_lighting lighting, int depth);
+uint32_t	compute_color(t_lighting *lighting, t_render *render);
+t_lighting	init_lighting(t_render *render);
+float		calculate_diffuse(t_lighting *lighting);
+float		calculate_specular(t_lighting *lighting, t_render *render);
 t_vector	get_intersect(t_ray ray, double t);
 t_light		*get_scene_light(t_scene_data *data);
 t_vector	surface_normal(void *obj, t_vector point, t_asset_type type);
@@ -70,18 +82,8 @@ float		shadow_caster(t_scene_data *data, t_vector intersect,
 				t_vector normal, t_light *light);
 float		ambient_occlusion(t_scene_data *data, t_vector point,
 				t_vector normal);
-void		render_scene(t_scene_data *data);
-void		draw_frame(t_scene_data *data, mlx_image_t *img);
-void		camera_setup(t_camera *cam);
-t_ray		camera_ray_for_pixel(t_camera *cam, float px, float py);
-uint32_t	trace_ray(t_scene_data *data, t_ray ray, int depth);
-t_lighting	init_lighting(t_render *render);
-float		calculate_diffuse(t_lighting *lighting);
-float		calculate_specular(t_lighting *lighting, t_render *render);
-uint32_t	compute_color(t_lighting *lighting, t_render *render);
-uint32_t	add_reflection(t_render *render, t_lighting lighting, int depth);
 
-// Shapes
+//	Shapes
 bool		plane_hit(t_plane *plane, t_ray ray, double *t);
 t_vector	plane_normal(t_plane *plane);
 bool		sphere_hit(t_sphere *sphere, t_ray ray, double *t);

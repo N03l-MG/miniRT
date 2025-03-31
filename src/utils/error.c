@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:26:09 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/21 15:14:08 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/25 10:52:29 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*get_error_message(t_error error)
 	[ERR_DATA] = "Error\nScene data error.",
 	[ERR_AMBIENT] = "Error\nScene must include an ambient light.",
 	[ERR_CAM] = "Error\nScene must include a camera.",
-	[ERR_LIGHT] = "Error\nScene must have ONE light object.",
+	[ERR_LIGHT] = "Error\nScene may only contain one light object.",
 	[ERR_UNKNOWN] = "Error\nUnknown identifier: '"
 	};
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_scene.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/13 17:45:06 by nmonzon           #+#    #+#             */
-/*   Updated: 2025/03/24 15:15:11 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/31 12:45:20 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static t_asset_node	*find_closest_intersection(t_scene_data *data, t_ray ray,
 	node = data->assets->head;
 	while (node)
 	{
-		if (((node->type == ASS_PLANE
+		if (((node->type == AST_PLANE
 					&& plane_hit((t_plane *)node->asset_struct, ray, &t))
-				|| (node->type == ASS_SPHERE
+				|| (node->type == AST_SPHERE
 					&& sphere_hit((t_sphere *)node->asset_struct, ray, &t))
-				|| (node->type == ASS_CYLINDER
+				|| (node->type == AST_CYLINDER
 					&& cylinder_hit((t_cylinder *)node->asset_struct, ray, &t)))
 			&& (t < *closest_t))
 		{
@@ -49,8 +49,6 @@ static uint32_t	calculate_lighting(t_render *render, int depth)
 	uint32_t	base_color;
 
 	lighting = init_lighting(render);
-	if (!lighting.light)
-		return (col_rgb(0, 0, 0, 0xFF));
 	light_pos = vec_new(lighting.light->pos_x, lighting.light->pos_y,
 			lighting.light->pos_z);
 	lighting.light_dir = vec_normalize(vec_sub(light_pos, lighting.intersect));

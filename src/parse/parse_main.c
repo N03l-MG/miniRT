@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_main.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 10:49:10 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/24 16:02:12 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/31 13:04:17 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ static void	check_valid(t_scene_data *data)
 		fatal_error(ERR_AMBIENT, NULL);
 	else if (data->cam == NULL)
 		fatal_error(ERR_CAM, NULL);
-	else if (data->assets->light_cnt != 1)
+	else if (data->assets->light_cnt > 1)
 		fatal_error(ERR_LIGHT, NULL);
+	else if (data->assets->light_cnt < 1)
+		create_dark_light(data);
 }
 
 static void	call_element(t_scene_data *data, char *line)
@@ -36,6 +38,8 @@ static void	call_element(t_scene_data *data, char *line)
 	if (get_number_of_splits(line, ' ') < 1)
 		return ;
 	param = ft_split(line, ' ');
+	if (!param)
+		fatal_error(ERR_MEMORY, data->window_data);
 	if (!ft_strcmp(param[0], "A"))
 		parse_ambience(data, param);
 	else if (!ft_strcmp(param[0], "C"))
@@ -73,7 +77,7 @@ static void	pass_color_to_parent(t_assets *assets)
 	current = assets->head;
 	while (current)
 	{
-		if (current->type == ASS_LIGHT)
+		if (current->type == AST_LIGHT)
 			current->col = ((t_light *)current->asset_struct)->col;
 		else
 			assign_properties(current, current->asset_struct, current->type);
@@ -91,6 +95,8 @@ void	parse_elements(t_scene_data *data, int fd)
 	while (line)
 	{
 		trimmed = ft_strtrim(line, "\n");
+		if (!trimmed)
+			fatal_error(ERR_MEMORY, data->window_data);
 		if (ft_strncmp(line, "\n", 1) == 0)
 		{
 			gc_free(line);

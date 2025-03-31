@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:08:17 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/24 08:40:26 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/25 12:25:10 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	main(int ac, char **av)
 		fatal_error(ERR_FILE, NULL);
 	parse_elements(&data, fd);
 	close(fd);
-	data.samples = SHDW_SAMPLES;
+	data.samples = fmin(fmax(SHDW_SAMPLES, 1), 112);
 	render_scene(&data);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 15:45:39 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/24 15:34:48 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/31 12:45:20 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,19 +77,19 @@ char	*get_split_param(char *str, int i)
 
 void	assign_properties(t_asset_node *current, void *asset, int type)
 {
-	if (type == ASS_PLANE)
+	if (type == AST_PLANE)
 	{
 		current->col = ((t_plane *)asset)->col;
 		current->roughness = ((t_plane *)asset)->roughness;
 		current->reflect = ((t_plane *)asset)->reflect;
 	}
-	else if (type == ASS_SPHERE)
+	else if (type == AST_SPHERE)
 	{
 		current->col = ((t_sphere *)asset)->col;
 		current->roughness = ((t_sphere *)asset)->roughness;
 		current->reflect = ((t_sphere *)asset)->reflect;
 	}
-	else if (type == ASS_CYLINDER)
+	else if (type == AST_CYLINDER)
 	{
 		current->col = ((t_cylinder *)asset)->col;
 		current->roughness = ((t_cylinder *)asset)->roughness;

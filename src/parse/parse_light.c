@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_light.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/21 16:03:17 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/31 13:04:31 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,10 @@ static void	add_light(t_assets *assets, t_light *new_light)
 	if (!check_valid(new_light))
 		return ;
 	new_node = gc_malloc(sizeof(t_asset_node));
+	if (!new_node)
+		fatal_error(ERR_MEMORY, NULL);
 	new_node->asset_struct = new_light;
-	new_node->type = ASS_LIGHT;
+	new_node->type = AST_LIGHT;
 	new_node->next = NULL;
 	if (assets->head == NULL)
 		assets->head = new_node;
@@ -49,8 +51,8 @@ static void	add_light(t_assets *assets, t_light *new_light)
 			current = current->next;
 		current->next = new_node;
 	}
-	assets->size++;
-	assets->light_cnt++;
+	assets->size ++;
+	assets->light_cnt ++;
 	printlog(LOG, "Light object setup successful.");
 }
 
@@ -76,6 +78,8 @@ int	parse_light(t_scene_data *data, char **param)
 	if (get_number_of_splits(param[3], ',') != 3)
 		return (printlog(WARNING, "Invalid light color."), 0);
 	new_light = gc_malloc(sizeof(t_light));
+	if (!new_light)
+		fatal_error(ERR_MEMORY, NULL);
 	set_params(new_light, param);
 	add_light(data->assets, new_light);
 	return (1);

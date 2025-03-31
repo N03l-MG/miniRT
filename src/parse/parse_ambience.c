@@ -6,7 +6,7 @@
 /*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 14:56:11 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/24 16:30:17 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/25 11:07:37 by jgraf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,11 @@ void	parse_ambience(t_scene_data *data, char **param)
 	if (get_number_of_split_elements(param) != 3)
 		fatal_error(ERR_DATA, NULL);
 	if (data->ambient == NULL)
+	{
 		data->ambient = gc_malloc(sizeof(t_ambient));
+		if (!data->ambient)
+			fatal_error(ERR_MEMORY, NULL);
+	}
 	else
 		printlog(LOG, "Ambient already exists... Replacing ambient.");
 	if (get_number_of_splits(param[2], ',') != 3)

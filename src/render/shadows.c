@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadows.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 10:56:02 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/24 12:55:14 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/31 12:44:46 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static float	check_ao_intersections(t_scene_data *data, t_ray ao_ray,
 	occlusion = 0;
 	while (node)
 	{
-		if (node->type == ASS_PLANE)
+		if (node->type == AST_PLANE)
 		{
 			if (plane_hit((t_plane *)node->asset_struct, ao_ray, &t)
 				&& t > 0.001f && t < max_distance)

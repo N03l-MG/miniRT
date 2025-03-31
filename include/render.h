@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 13:42:35 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/24 13:45:24 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/03/31 16:48:03 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "maths.h"
 # include "assets.h"
+# include "structs.h"
 
 typedef struct s_render
 {
