@@ -47,7 +47,7 @@ vpath %.c $(SOURCES)
 ###############                    SOURCE FILES                  ###############
 ################################################################################
 
-PARSE_SRC = $(addprefix parse/, parse_main.c parse_light.c parse_plane.c parse_sphere.c parse_cylinder.c parse_utils.c parse_ambience.c parse_cam.c)
+PARSE_SRC = $(addprefix parse/, parse_main.c parse_light.c parse_plane.c parse_sphere.c parse_cylinder.c parse_utils.c parse_ambience.c parse_cam.c dark_light.c)
 UTILS_SRC = $(addprefix utils/, logging.c error.c cleanup.c)
 RENDER_SRC = $(addprefix render/, render_scene.c camera.c shadows.c render_utils.c draw_window.c lighting.c reflection.c)
 COLOR_SRC = $(addprefix color/, color.c)
