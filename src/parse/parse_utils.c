@@ -28,7 +28,7 @@ void	free_split(char **splt)
 	while (splt[i])
 	{
 		gc_free(splt[i]);
-		i ++;
+		i++;
 	}
 	gc_free(splt);
 }

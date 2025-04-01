@@ -15,7 +15,7 @@
 
 # include "color.h"
 
-// Visual Assets
+// Visual Assets (mandatory in scene)
 typedef struct s_ambient
 {
 	float	ratio;

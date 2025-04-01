@@ -13,27 +13,37 @@
 #ifndef MINIRT_H
 # define MINIRT_H
 
-//	Libraries
+			//   ~~    Includes   ~~    //
 # include "../libft/include/libft.h"
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "structs.h"
 # include "maths.h"
 # include "render.h"
 
-//	Defines
-# define WIDTH 800
-# define HEIGHT 500
-# define SHDW_SAMPLES 64
-# define MAX_REFLECT 2
+			//   ~~    Defines    ~~   //
+// Standard quality
+// # define WIDTH 800
+// # define HEIGHT 500
+// # define SHDW_SAMPLES 64
+// # define MAX_REFLECT 50
 
-//	Use this config instead for smooth movement
-//# define WIDTH 320
-//# define HEIGHT 200
-//# define SHDW_SAMPLES 1
-//# define MAX_REFLECT 1
+// Low quality for smooth movement
+// # define WIDTH 320
+// # define HEIGHT 200
+// # define SHDW_SAMPLES 1
+// # define MAX_REFLECT 1
+
+// High quality for nice screenshots
+# define WIDTH 1600
+# define HEIGHT 1000
+# define SHDW_SAMPLES 80
+# define MAX_REFLECT 100
+
 # define DEFAULT_ROUGHNESS 0.6
 # define DEFAULT_REFLECT 0.2
+# define TOTAL_PIXELS (WIDTH * HEIGHT)
 
+			//   ~~    Prototypes   ~~   //
 //	Parsing
 void		parse_elements(t_scene_data *data, int fd);
 void		parse_ambience(t_scene_data *data, char **param);

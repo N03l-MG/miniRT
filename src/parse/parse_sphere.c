@@ -53,8 +53,8 @@ static void	add_sphere(t_assets *assets, t_sphere *new_sphere)
 			current = current->next;
 		current->next = new_node;
 	}
-	assets->size ++;
-	assets->sphere_cnt ++;
+	assets->size++;
+	assets->sphere_cnt++;
 	printlog(LOG, "Sphere object setup successful.");
 }
 

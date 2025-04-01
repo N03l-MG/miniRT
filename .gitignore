@@ -1,4 +1,5 @@
 *.subject.pdf
 .vscode/
 */*.o
+_obj/
 miniRT

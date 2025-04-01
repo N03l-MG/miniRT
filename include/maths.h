@@ -61,10 +61,6 @@ float		vec_length(t_vector v);
 t_vector	vec_normalize(t_vector v);
 t_vector	vec_random(float min, float max);
 
-// // Ray operations
-// t_ray       ray_new(t_vector origin, t_vector direction);
-// t_vector    ray_at(t_ray ray, float t);
-
 // Math calculations
 float		fast_inverse_sqrt(float number);
 bool		solve_quadratic(float a, float b, float c, t_quad *t);

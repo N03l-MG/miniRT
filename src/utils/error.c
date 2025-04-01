@@ -47,6 +47,5 @@ void	fatal_error(t_error error, t_window_data *window_data)
 
 	message = get_error_message(error);
 	ft_fprintf(2, RED "Fatal: %s\n" RESET, message);
-	ft_fprintf(1, "Exiting miniRT.\n");
 	clean_exit(EXIT_FAILURE, window_data);
 }

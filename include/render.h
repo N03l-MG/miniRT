@@ -17,6 +17,7 @@
 # include "assets.h"
 # include "structs.h"
 
+// Argument structs for large functions
 typedef struct s_render
 {
 	t_scene_data	*data;

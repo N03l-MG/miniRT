@@ -12,18 +12,18 @@
 
 #include "miniRT.h"
 
-static void	escape_key(mlx_key_data_t keydata, t_window_data *window_data)
-{
-	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
-		clean_exit(EXIT_SUCCESS, window_data);
-}
-
 void	key_hook(mlx_key_data_t keydata, void *param)
 {
 	t_scene_data	*data;
+	double			current_time;
 
 	data = (t_scene_data *)param;
-	escape_key(keydata, data->window_data);
+	current_time = mlx_get_time();
+	if (keydata.key == MLX_KEY_ESCAPE && keydata.action == MLX_PRESS)
+		clean_exit(EXIT_SUCCESS, data->window_data);
+	if (current_time - data->window_data->last_render < 1.0 / 30.0
+		|| data->window_data->is_rendering)
+		return ;
 	if (translation_keys(keydata, data)
 		|| rotation_keys(keydata, data)
 		|| sample_keys(keydata, data))
@@ -31,4 +31,5 @@ void	key_hook(mlx_key_data_t keydata, void *param)
 		camera_setup(data->cam);
 		draw_frame(data, data->window_data->mlx_image);
 	}
+	data->window_data->last_render = current_time;
 }

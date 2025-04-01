@@ -52,7 +52,7 @@ static float	calculate_shadow_intensity(t_scene_data *data,
 		if (is_occluded(data, shadow_ray, light_distance))
 			shadow_intensity += 1.0f
 				- (fmax(fmin(light_distance, 500.0f), 0.0f) / 500);
-		i ++;
+		i++;
 	}
 	return (shadow_intensity);
 }
@@ -115,7 +115,7 @@ float	ambient_occlusion(t_scene_data *data, t_vector point, t_vector normal)
 		ao_ray.origin = vec_add(point, vec_scale(normal, 0.001f));
 		ao_ray.direction = vec_normalize(random_dir);
 		occlusion += check_ao_intersections(data, ao_ray, max_distance);
-		i ++;
+		i++;
 	}
 	return (1.0f - (occlusion / (float)data->samples));
 }

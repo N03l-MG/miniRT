@@ -22,5 +22,6 @@ void	clean_exit(int status, t_window_data *window_data)
 			mlx_terminate(window_data->mlx_window);
 	}
 	gc_collect();
+	ft_fprintf(1, GREEN "Exited miniRT\n" RESET);
 	exit(status);
 }

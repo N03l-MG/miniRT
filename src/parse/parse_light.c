@@ -51,8 +51,8 @@ static void	add_light(t_assets *assets, t_light *new_light)
 			current = current->next;
 		current->next = new_node;
 	}
-	assets->size ++;
-	assets->light_cnt ++;
+	assets->size++;
+	assets->light_cnt++;
 	printlog(LOG, "Light object setup successful.");
 }
 

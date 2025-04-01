@@ -55,8 +55,8 @@ static void	add_plane(t_assets *assets, t_plane *new_plane)
 			current = current->next;
 		current->next = new_node;
 	}
-	assets->size ++;
-	assets->plane_cnt ++;
+	assets->size++;
+	assets->plane_cnt++;
 	printlog(LOG, "Plane object setup successful.");
 }
 

@@ -75,7 +75,11 @@ uint32_t	trace_ray(t_scene_data *data, t_ray ray, int depth)
 	closest_node = find_closest_intersection(data, ray,
 			&closest_t, &closest_type);
 	if (!closest_node)
-		return (col_rgb(0, 0, 0, 0xFF));
+		return (col_rgb(
+			data->ambient->col.r * data->ambient->ratio,
+			data->ambient->col.g * data->ambient->ratio,
+			data->ambient->col.b * data->ambient->ratio,
+			255));
 	return (calculate_lighting(&(t_render){data, ray, closest_node,
 			closest_type, closest_t}, depth));
 }

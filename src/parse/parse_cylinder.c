@@ -57,8 +57,8 @@ static void	add_cylinder(t_assets *assets, t_cylinder *new_cylinder)
 			current = current->next;
 		current->next = new_node;
 	}
-	assets->size ++;
-	assets->cylinder_cnt ++;
+	assets->size++;
+	assets->cylinder_cnt++;
 	printlog(LOG, "Cylinder object setup successful.");
 }
 

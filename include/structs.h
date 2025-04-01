@@ -17,6 +17,7 @@
 # include "assets.h"
 # include "color.h"
 
+//	Enums
 typedef enum e_log_type
 {
 	LOG,
@@ -46,11 +47,14 @@ typedef enum e_asset_type
 	NO_TYPE
 }	t_asset_type;
 
+//	Structs
 typedef struct s_window_data
 {
 	mlx_t			*mlx_window;
 	mlx_image_t		*mlx_image;
 	unsigned char	*image_data;
+	double			last_render;
+	bool			is_rendering;
 }	t_window_data;
 
 typedef struct s_asset_node
