@@ -35,7 +35,7 @@ void	render_scene(t_scene_data *data)
 {
 	t_window_data	window_data;
 
-	window_data.mlx_window = mlx_init(WIDTH, HEIGHT, "miniRT", false);
+	window_data.mlx_window = mlx_init(WIDTH, HEIGHT, "miniRT", true);
 	if (!window_data.mlx_window)
 		fatal_error(ERR_WINDOW, &window_data);
 	window_data.mlx_image

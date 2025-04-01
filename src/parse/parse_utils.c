@@ -39,7 +39,7 @@ int	get_number_of_split_elements(char **element)
 
 	i = 0;
 	while (element[i])
-		i ++;
+		i++;
 	return (i);
 }
 
@@ -53,12 +53,12 @@ int	get_number_of_splits(char *str, char c)
 	while (str[i])
 	{
 		while (str[i] && str[i] == c)
-			i ++;
+			i++;
 		if (str[i] && str[i] != c)
 		{
-			nmb ++;
+			nmb++;
 			while (str[i] && str[i] != c)
-				i ++;
+				i++;
 		}
 	}
 	return (nmb);

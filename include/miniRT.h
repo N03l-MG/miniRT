@@ -21,18 +21,18 @@
 # include "render.h"
 
 //	Defines
-# define WIDTH 960
-# define HEIGHT 544
-# define SHDW_SAMPLES 48
+# define WIDTH 800
+# define HEIGHT 500
+# define SHDW_SAMPLES 64
 # define MAX_REFLECT 2
-# define DEFAULT_ROUGHNESS 0.6
-# define DEFAULT_REFLECT 0.2
 
-//	This configuration will allow you to move somewhat smoothly
+//	Use this config instead for smooth movement
 //# define WIDTH 320
-//# define HEIGHT 240
+//# define HEIGHT 200
 //# define SHDW_SAMPLES 1
 //# define MAX_REFLECT 1
+# define DEFAULT_ROUGHNESS 0.6
+# define DEFAULT_REFLECT 0.2
 
 //	Parsing
 void		parse_elements(t_scene_data *data, int fd);

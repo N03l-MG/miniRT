@@ -35,7 +35,7 @@ static void	call_element(t_scene_data *data, char *line)
 {
 	char	**param;
 
-	if (get_number_of_splits(line, ' ') < 1)
+	if (get_number_of_splits(line, ' ') < 1 || line[0] == '#')
 		return ;
 	param = ft_split(line, ' ');
 	if (!param)
