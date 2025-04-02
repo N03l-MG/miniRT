@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jgraf <jgraf@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/10 11:05:08 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/26 12:00:46 by jgraf            ###   ########.fr       */
+/*   Updated: 2025/04/02 15:01:12 by nmonzon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 
 			//   ~~    Defines    ~~   //
 // Standard quality
-// # define WIDTH 800
-// # define HEIGHT 500
-// # define SHDW_SAMPLES 64
-// # define MAX_REFLECT 50
+# define WIDTH 800
+# define HEIGHT 500
+# define SHDW_SAMPLES 64
+# define MAX_REFLECT 50
 
 // Low quality for smooth movement
 // # define WIDTH 320
@@ -34,10 +34,10 @@
 // # define MAX_REFLECT 1
 
 // High quality for nice screenshots
-# define WIDTH 1600
-# define HEIGHT 1000
-# define SHDW_SAMPLES 80
-# define MAX_REFLECT 100
+// # define WIDTH 1600
+// # define HEIGHT 1000
+// # define SHDW_SAMPLES 80
+// # define MAX_REFLECT 100
 
 # define DEFAULT_ROUGHNESS 0.6
 # define DEFAULT_REFLECT 0.2
