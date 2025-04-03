@@ -1,30 +1,31 @@
 <div align="center">
   <h1>
-    miniRT (42 project)
+    🌟 miniRT (42 project)
   </h1>
   <p>
     <b><i>Basic ray-tracing engine written in C using the MLX42 graphics library.</i></b>
   </p>
 </div>
 
-[CAPTIVATING IMAGE]
+![test_scene](screenshots/test_scene.png)
 
 _This project was made in collaboration with [Cimex](https://github.com/Cimex404). He has uploaded it as his own repository as well!_
 
-MiniRT is a basic 3D ray-tracer that uses the MLX42 graphical library (OpenGL windows) to render a scene based off a scene file containing camera, light and object data.
-It works by casting a ray for each screen pixel out of the camera and calculating intersections with objects in 3D space. The objects have surface normals that dictate the ray should behave when bouncing back to the light source. The scene currently can only have one point light and all rays trace back to it. Shadows are calculated in two different ways; shadow rays and ambient occlusion. Shadow rays are generated where the ray hits an object and cannot continue, simulating how the shadow would be cast onto whichever surface it occluded. Ambient occlusion on the other hand is purely proximity-based between two very close objects and simulates how light gets trapped in tight spaces and diffuses into darkness. Both of these shading processes use samples and pseudo-random scatter to simulate diffusion. The higher the samples the less noisy the shadows look in exchange for computation time. Additionally, some extra visual features have been implemented, as well as basic run-time user controls. Memory is handled with a rudimentary garbage collection system and there is a robust logging and error handling system for convenience. 
+## About
+MiniRT is a basic 3D ray-tracer that uses the MLX42 graphical library (OpenGL windows) to render a scene based off a scene file containing camera, light and object data.\
+It works by casting a ray for each screen pixel out of the camera and calculating intersections with objects in 3D space. The objects have surface normals that dictate the ray should behave when bouncing back to the light source. The scene currently can only have one point light and all rays trace back to it. Shadows are calculated in two different ways; shadow rays and ambient occlusion. Shadow rays are generated where the ray hits an object and cannot continue, simulating how the shadow would be cast onto whichever surface it occluded. Ambient occlusion on the other hand is purely proximity-based between two very close objects and simulates how light gets trapped in tight spaces and diffuses into darkness. Both of these shading processes use samples and pseudo-random scatter to simulate diffusion. The higher the samples the less noisy the shadows look in exchange for computation time. Additionally, some extra visual features have been implemented, as well as basic run-time user controls. Memory is handled with a rudimentary garbage collection system and there is a robust logging and error handling system for convenience.\
 Despite being a project for 42, the latest and all future version will deviate from **the norm**. If you wish to see a fully norm-compatible version that we submitted, check the commit history for that point in development!
 
 ## Features
-- **Primitive Assets:**
+- **Primitive Assets:**\
 	Currently the project features three primitive objects: planes, spheres and cylinders. Each have unique parameters that can be set in the scene file. More info in _Usage_.
-- **Lighting:**
+- **Lighting:**\
 	The scene is lit by two sources, an ambient light and a point light. The ambient light acts as a global illumination and also controls the base atmosphere color where no objects are hit (like a skylight in other 3D software). The point light is a single point out of which light is cast. It is currently invisible on its own and only casts light onto objects directly. It also has a fall-off distance and does not cast shadows indefinitely far away.
-- **Roughness:**
+- **Roughness:**\
 	To simulate different materials, we implemented a roughness index which can be optionally tweaked for every object. This roughness will determine how much of a specular highlight forms at the point in the object in which the surface normal directly reflects light rays back into the camera.
-- **Reflections:**
+- **Reflections:**\
 	Some basic reflections have been implemented and each object has an optional reflectivity index, much like roughness. The maximum reflections are set as a constant in each preset, with the highest quality allowing up to 100 reflections.
-- **User Input:**
+- **User Input:**\
 	Key hooks have been added to allow for some user input. The controls allow you to move, rotate and change thw shadow sample dynamically.
 	Keybinds:
 	- `w` - move forward
@@ -35,16 +36,17 @@ Despite being a project for 42, the latest and all future version will deviate f
 	- `↓` - rotate down (until looking straight down)
 	- `←` and `→` - rotate left and right respectively (loops back around)
 	- Numpad `+` and `-` - increase/decrease shadow samples by 16 (from a range of 1 to 112)
-- **Quality Presets:**
+- **Quality Presets:**\
 	In order to test scenes easily I have made three different quality presets that change the default samples, maximum reflections and window dimensions. The three presets are:
 	- _Standard_ - 800 x 500, 64 samples, 50 reflections (a nice balance, samples can be lowered manually for slow movement)
 	- _Low_ - 320 x 200, 1 sample, 1 reflection (allows smooth movement around the scene at the cost of poor quality)
 	- _High_ - 1600 x 1000, 80 samples, 100 reflections (for high quality renders, movement is essentially impossible)
-- **Logging System:**
+	To change the quality, you can compile with `make QUALITY=LOW` or `QUALITY=HIGH`. If compiled without this flag it will default to standard quality.
+- **Logging System:**\
 	The program logs all objects when parsing them and reports any issues with warnings or errors as they are found. When rendering it also displays the percentage of processed pixels in intervals of 10.
 
 ## Usage
-You can simply compile with `make`. To clean binaries use `make clean` or `make fclean` for a full wipe of the executable.
+You can simply compile with `make`. To clean binaries use `make clean` or `make fclean` for a full wipe of the executable. You can also specify the quality as previously described.
 To run miniRT on a scene you must use this command:
 
 ```bash
@@ -85,8 +87,12 @@ sp   -5,0,-21                             16       255,255,255 0
 **NOTE:** The project depends on my [libft](https://github.com/N03l-MG/libft) utilities library as well as [MLX42](https://github.com/codam-coding-college/MLX42) for graphics. Both are added as submodules in the repository.
 
 ## Render Gallery
-
-[IMAGES]
+![alien_planet](screenshots/alien_planet.png)
+![mirror_room](screenshots/mirror_room.png)
+![underwater_temple](screenshots/underwater_temple.png)
+![water_molecule](screenshots/water_molecule.png)
+![eval_scene_7](screenshots/eval_scene_7.png)
+![octagon](screenshots/octagon.png)
 
 ## Future Plans
 This project has undoubtedly been my favorite from the 42 core curriculum so far. I look forward to adding many advanced features, _though no longer strictly following the 42 norm or project rules_.
@@ -98,4 +104,4 @@ Here is a list of the features I would like to add:
 - Support for the **obj** 3D format, allowing for rendering of any 3D model.
 - _Maybe_ light refraction and caustics.
 - Bump-mapping and textures.
-- _If i'm feeling crazy_, a way to edit the assets dynamically during runtime.
+- _If I'm feeling crazy_, a way to edit the assets dynamically during runtime.

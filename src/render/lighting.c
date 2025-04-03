@@ -47,6 +47,18 @@ float	calculate_specular(t_lighting *lighting, t_render *render)
 uint32_t	compute_color(t_lighting *lighting, t_render *render)
 {
 	t_color	col;
+	float	fog_factor;
+	t_color	fog_color;
+	float	distance;
+
+	distance = vec_length(vec_sub(lighting->intersect, render->ray.origin));
+	fog_factor = fmin(distance / 10000.0f, 1.0f);
+	fog_factor = 1.0f - exp(-fog_factor * fog_factor * 2.0f);
+	fog_color = (t_color){
+			render->data->ambient->col.r * render->data->ambient->ratio,
+			render->data->ambient->col.g * render->data->ambient->ratio,
+			render->data->ambient->col.b * render->data->ambient->ratio,
+			255};
 
 	col.r = fmin((render->closest_node->col.r * lighting->ambient_light)
 			+ (render->closest_node->col.r * lighting->diffuse
@@ -69,5 +81,10 @@ uint32_t	compute_color(t_lighting *lighting, t_render *render)
 			+ (lighting->light->col.b * lighting->specular
 				* lighting->light->brightness
 				* lighting->shadow_intensity), 0xFF);
+	
+	col.r = col.r * (1.0f - fog_factor) + fog_color.r * fog_factor;
+	col.g = col.g * (1.0f - fog_factor) + fog_color.g * fog_factor;
+	col.b = col.b * (1.0f - fog_factor) + fog_color.b * fog_factor;
+
 	return (col_rgb(col.r, col.g, col.b, 0xFF));
 }

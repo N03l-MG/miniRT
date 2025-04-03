@@ -27,7 +27,9 @@ bool	plane_hit(t_plane *plane, t_ray ray, double *t)
 		return (false);
 	numer = vec_dot(vec_sub(plane_point, ray.origin), plane_normal);
 	*t = numer / denom;
-	return (*t >= 0);
+	if (*t < 0 || *t > 10000.0)  // Add max render distance of 10,000 units
+		return (false);
+	return (true);
 }
 
 t_vector	plane_normal(t_plane *plane)

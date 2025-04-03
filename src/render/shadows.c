@@ -51,7 +51,7 @@ static float	calculate_shadow_intensity(t_scene_data *data,
 		shadow_ray.direction = jitter_dir;
 		if (is_occluded(data, shadow_ray, light_distance))
 			shadow_intensity += 1.0f
-				- (fmax(fmin(light_distance, 500.0f), 0.0f) / 500);
+				- (fmax(fmin(light_distance, 2000.0f), 0.0f) / 2000);
 		i++;
 	}
 	return (shadow_intensity);

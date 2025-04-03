@@ -16,7 +16,16 @@
 
 NAME = miniRT
 CC = cc
-FLAGS = -Wall -Wextra -Werror -flto -Ofast -march=native -MMD -MP $(addprefix -I, $(INCLUDES))
+QUALITY ?= STANDARD
+ifeq ($(QUALITY),HIGH)
+	QUALITY_VAL = 2
+else ifeq ($(QUALITY),LOW)
+	QUALITY_VAL = 0
+else
+	QUALITY_VAL = 1
+endif
+
+FLAGS = -Wall -Wextra -Werror -flto -Ofast -march=native -MMD -MP -DQUALITY=$(QUALITY_VAL) $(addprefix -I, $(INCLUDES))
 LDFLAGS = -flto #-fsanitize=address
 LIBFT = ./libft/libft.a
 MLX = ./MLX42/build/libmlx42.a

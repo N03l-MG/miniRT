@@ -21,26 +21,30 @@
 # include "render.h"
 
 			//   ~~    Defines    ~~   //
-// Standard quality
-# define WIDTH 800
-# define HEIGHT 500
-# define SHDW_SAMPLES 64
-# define MAX_REFLECT 50
+// Quality presets
+# ifndef QUALITY
+#  define QUALITY 1  // STANDARD as default
+# endif
 
-// Low quality for smooth movement
-// # define WIDTH 320
-// # define HEIGHT 200
-// # define SHDW_SAMPLES 1
-// # define MAX_REFLECT 1
+# if QUALITY == 0    // LOW
+#  define WIDTH 320
+#  define HEIGHT 200
+#  define SHDW_SAMPLES 1
+#  define MAX_REFLECT 1
+# elif QUALITY == 2  // HIGH
+#  define WIDTH 1600
+#  define HEIGHT 1000
+#  define SHDW_SAMPLES 80
+#  define MAX_REFLECT 100
+# else              // STANDARD
+#  define WIDTH 800
+#  define HEIGHT 500
+#  define SHDW_SAMPLES 64
+#  define MAX_REFLECT 50
+# endif
 
-// High quality for nice screenshots
-// # define WIDTH 1600
-// # define HEIGHT 1000
-// # define SHDW_SAMPLES 80
-// # define MAX_REFLECT 100
-
-# define DEFAULT_ROUGHNESS 0.6
-# define DEFAULT_REFLECT 0.2
+# define DEFAULT_ROUGHNESS 0.33
+# define DEFAULT_REFLECT 0.1
 # define TOTAL_PIXELS (WIDTH * HEIGHT)
 
 			//   ~~    Prototypes   ~~   //
