@@ -111,6 +111,7 @@ t_vector 	obj_normal(t_obj *obj, int face_index);
 
 //	Logging
 void		printlog(t_log_type log_type, char *message);
+void		scene_debug(t_scene_data *scene);
 
 //	Error Management
 void		error(t_error error, char *context);

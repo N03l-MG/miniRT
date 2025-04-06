@@ -87,7 +87,7 @@ int	parse_cylinder(t_scene_data *data, char **param)
 {
 	t_cylinder	*new_cylinder;
 
-	if (get_number_of_split_elements(param) < 7
+	if (get_number_of_split_elements(param) < 6
 		|| get_number_of_split_elements(param) > 8)
 		return (printlog(WARNING, "Invalid cylinder configuration."), 0);
 	if (get_number_of_splits(param[1], ',') != 3)

@@ -41,6 +41,7 @@ int	main(int ac, char **av)
 	parse_elements(&data, fd);
 	close(fd);
 	data.samples = fmin(fmax(SHDW_SAMPLES, 1), 112);
+	scene_debug(&data);
 	render_scene(&data);
 	return (0);
 }
