@@ -14,6 +14,7 @@
 # define ASSETS_H
 
 # include "color.h"
+# include "obj.h"
 
 // Visual Assets (mandatory in scene)
 typedef struct s_ambient

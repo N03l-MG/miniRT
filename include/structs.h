@@ -15,7 +15,6 @@
 
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "assets.h"
-# include "obj.h"
 # include "color.h"
 
 //	Enums
@@ -36,7 +35,8 @@ typedef enum e_error
 	ERR_AMBIENT,
 	ERR_CAM,
 	ERR_LIGHT,
-	ERR_UNKNOWN
+	ERR_UNKNOWN,
+	ERR_OBJFILE
 }	t_error;
 
 typedef enum e_asset_type

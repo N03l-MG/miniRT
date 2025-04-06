@@ -20,11 +20,12 @@ static char	*get_error_message(t_error error)
 	[ERR_FILE] = "Could not open or read file.",
 	[ERR_WINDOW] = "Failed to create MLX window.",
 	[ERR_IMAGE] = "Failed to create MLX image.",
-	[ERR_DATA] = "Error\nScene data error.",
-	[ERR_AMBIENT] = "Error\nScene must include an ambient light.",
-	[ERR_CAM] = "Error\nScene must include a camera.",
-	[ERR_LIGHT] = "Error\nScene may only contain one light object.",
-	[ERR_UNKNOWN] = "Error\nUnknown identifier: '"
+	[ERR_DATA] = "Error: Scene data error.",
+	[ERR_AMBIENT] = "Error: Scene must include an ambient light.",
+	[ERR_CAM] = "Error: Scene must include a camera.",
+	[ERR_LIGHT] = "Error: Scene may only contain one light object.",
+	[ERR_UNKNOWN] = "Error: Unknown identifier: '",
+	[ERR_OBJFILE] = "Failed to read Wavefront obj file."
 	};
 
 	return (messages[error]);

@@ -1,261 +1,250 @@
 #include "miniRT.h"
 
-static void count_elements(char *line, t_obj *obj)
+static bool	check_valid(t_obj *obj)
 {
-	if (line[0] == 'v' && line[1] == ' ')
-		obj->num_vertices++;
-	else if (line[0] == 'v' && line[1] == 'n')
-		obj->num_normals++;
-	else if (line[0] == 'v' && line[1] == 't')
-		obj->num_uvs++;
-	else if (line[0] == 'f' && line[1] == ' ')
-		obj->num_faces++;
+	if ((obj->vec_x < -1 || obj->vec_x > 1)
+		|| (obj->vec_y < -1 || obj->vec_y > 1)
+		|| (obj->vec_z < -1 || obj->vec_z > 1)
+		|| (obj->scale < 0)
+		|| (obj->roughness < 0 || obj->roughness > 1)
+		|| (obj->reflect < 0 || obj->reflect > 1)
+		|| (obj->col.r < 0 || obj->col.r > 255)
+		|| (obj->col.g < 0 || obj->col.g > 255)
+		|| (obj->col.b < 0 || obj->col.b > 255))
+		return (printlog(WARNING, "Invalid .obj asset parameters"), false);
+	return (true);
 }
 
-static t_obj *allocate_obj_data(const char *filepath)
+static char	*read_line(int fd)
 {
-    t_obj   *obj;
-    char    *line;
-    int     fd;
-
-    obj = gc_malloc(sizeof(t_obj));
-    if (!obj)
-        return (NULL);
-    obj->num_vertices = 0;
-    obj->num_normals = 0;
-    obj->num_uvs = 0;
-    obj->num_faces = 0;
-
-    fd = open(filepath, O_RDONLY);
-    if (fd < 0)
-        return (NULL);
-    
-    line = get_next_line(fd);
-    while (line)
-    {
-        count_elements(line, obj);
-        gc_free(line);
-        line = get_next_line(fd);
-    }
-    close(fd);
-
-    obj->vertices = gc_malloc(sizeof(t_vector) * (obj->num_vertices + 1));
-    obj->normals = gc_malloc(sizeof(t_vector) * (obj->num_normals + 1));
-    obj->uvs = gc_malloc(sizeof(t_uv) * (obj->num_uvs + 1));
-    obj->faces = gc_malloc(sizeof(Face) * (obj->num_faces + 1));
-
-    if (!obj->vertices || !obj->normals || !obj->uvs || !obj->faces)
-    {
-        gc_free(obj->vertices);
-        gc_free(obj->normals);
-        gc_free(obj->uvs);
-        gc_free(obj->faces);
-        gc_free(obj);
-        return (NULL);
-    }
-    return (obj);
-}
-
-static void parse_vertex(char *line, t_vector *vertex)
-{
-	char	**coords;
-
-	coords = ft_split(line + 2, ' ');
-	if (!coords || get_number_of_split_elements(coords) != 3)
-		fatal_error(ERR_FILE, NULL);
-	vertex->x = ft_atof(coords[0]);
-	vertex->y = ft_atof(coords[1]);
-	vertex->z = ft_atof(coords[2]);
-	free_split(coords);
-}
-
-static void parse_face(char *line, Face *face)
-{
-	char	**vertices;
-	char	**indices;
+	char	buffer[1024];
 	int		i;
-
-	vertices = ft_split(line + 2, ' ');
-	if (!vertices || get_number_of_split_elements(vertices) != 3)
-		fatal_error(ERR_FILE, NULL);
+	int		bytes;
+	char	c;
 
 	i = 0;
-	while (i < 3)
+	while ((bytes = read(fd, &c, 1)) > 0 && c != '\n' && i < 1023)
+		buffer[i++] = c;
+	buffer[i] = '\0';
+	//printf("Read line: %s\n", buffer);
+	if (bytes <= 0 && i == 0)
+		return (NULL);
+	return (ft_strdup(buffer));
+}
+
+static void	count_alloc_elements(t_obj *obj, int fd)
+{
+	char	*line;
+
+	obj->num_vertices = 0;
+	obj->num_normals = 0;
+	obj->num_uvs = 0;
+	obj->num_faces = 0;
+	
+	while ((line = read_line(fd)))
 	{
-		indices = ft_split(vertices[i], '/');
-		if (!indices)
-			fatal_error(ERR_FILE, NULL);
-		
-		face->v[i] = ft_atoi(indices[0]) - 1;
-		face->vt[i] = (indices[1] && *indices[1]) ? ft_atoi(indices[1]) - 1 : -1;
-		face->vn[i] = (indices[2] && *indices[2]) ? ft_atoi(indices[2]) - 1 : -1;
-		
-		free_split(indices);
-		i++;
+		if (ft_strncmp(line, "v ", 2) == 0)
+			obj->num_vertices++;
+		else if (ft_strncmp(line, "vn ", 3) == 0)
+			obj->num_normals++;
+		else if (ft_strncmp(line, "vt ", 3) == 0)
+			obj->num_uvs++;
+		else if (ft_strncmp(line, "f ", 2) == 0)
+			obj->num_faces++;
+		gc_free(line);
 	}
-	free_split(vertices);
+	obj->vertices = gc_malloc(sizeof(t_vector) * obj->num_vertices);
+	obj->normals = gc_malloc(sizeof(t_vector) * obj->num_normals);
+	obj->uvs = gc_malloc(sizeof(t_uv) * obj->num_uvs);
+	obj->faces = gc_malloc(sizeof(t_face) * obj->num_faces);
+	if (!obj->vertices || !obj->normals || !obj->uvs || !obj->faces)
+		fatal_error(ERR_MEMORY, NULL);
 }
 
-static void parse_obj_file(t_obj *obj, const char *filepath)
+static void	parse_vertex(char *line, t_obj *obj, int index)
 {
-    int     fd;
-    char    *line;
-    int     v_idx = 0;
-    int     vn_idx = 0;
-    int     vt_idx = 0;
-    int     f_idx = 0;
+	t_vector	vertex;
+	char		**split;
 
-    fd = open(filepath, O_RDONLY);
-    if (fd < 0)
-        fatal_error(ERR_FILE, NULL);
-
-    // Initialize arrays with 0s
-    ft_memset(obj->vertices, 0, sizeof(t_vector) * (obj->num_vertices + 1));
-    ft_memset(obj->normals, 0, sizeof(t_vector) * (obj->num_normals + 1));
-    ft_memset(obj->uvs, 0, sizeof(t_uv) * (obj->num_uvs + 1));
-    ft_memset(obj->faces, 0, sizeof(Face) * (obj->num_faces + 1));
-
-    line = get_next_line(fd);
-    while (line)
-    {
-        if (line[0] == 'v' && line[1] == ' ' && v_idx < obj->num_vertices)
-            parse_vertex(line, &obj->vertices[v_idx++]);
-        else if (line[0] == 'v' && line[1] == 'n' && vn_idx < obj->num_normals)
-            parse_vertex(line, &obj->normals[vn_idx++]);
-        else if (line[0] == 'v' && line[1] == 't' && vt_idx < obj->num_uvs)
-        {
-            char **coords = ft_split(line + 3, ' ');
-            if (coords && get_number_of_split_elements(coords) >= 2)
-            {
-                obj->uvs[vt_idx].u = ft_atof(coords[0]);
-                obj->uvs[vt_idx].v = ft_atof(coords[1]);
-                vt_idx++;
-            }
-            free_split(coords);
-        }
-        else if (line[0] == 'f' && line[1] == ' ' && f_idx < obj->num_faces)
-            parse_face(line, &obj->faces[f_idx++]);
-        
-        gc_free(line);
-        line = get_next_line(fd);
-    }
-    close(fd);
+	split = ft_split(line, ' ');
+	vertex.x = ft_atof(split[1]);
+	vertex.y = ft_atof(split[2]);
+	vertex.z = ft_atof(split[3]);
+	obj->vertices[index] = vertex; // Use the local index
+	free_split(split);
 }
 
-static void set_params(t_obj *obj, char **param)
+static void	parse_normal(char *line, t_obj *obj, int index)
 {
-    char **pos;
-    char **rot;
-    char **col;
+	t_vector	normal;
+	char		**split;
 
-    obj->roughness = DEFAULT_ROUGHNESS;
-    obj->reflect = DEFAULT_REFLECT;
-    obj->scale = 1.0f;  // Default scale
-
-    pos = ft_split(param[2], ',');
-    rot = ft_split(param[3], ',');
-    col = ft_split(param[5], ',');
-
-    if (!pos || !rot || !col)
-        fatal_error(ERR_DATA, NULL);
-
-    // Position
-    obj->pos_x = ft_atof(pos[0]);
-    obj->pos_y = ft_atof(pos[1]);
-    obj->pos_z = ft_atof(pos[2]);
-    
-    // Rotation
-    obj->rot_x = ft_atof(rot[0]);
-    obj->rot_y = ft_atof(rot[1]);
-    obj->rot_z = ft_atof(rot[2]);
-
-    // Scale
-    obj->scale = ft_atof(param[4]);
-
-    // Color
-    obj->col.r = ft_atoi(col[0]);
-    obj->col.g = ft_atoi(col[1]);
-    obj->col.b = ft_atoi(col[2]);
-
-    // Material properties (optional)
-    if (get_number_of_split_elements(param) >= 7)
-        obj->roughness = ft_atof(param[6]);
-    if (get_number_of_split_elements(param) >= 8)
-        obj->reflect = ft_atof(param[7]);
-
-    free_split(pos);
-    free_split(rot);
-    free_split(col);
+	split = ft_split(line, ' ');
+	normal.x = ft_atof(split[1]);
+	normal.y = ft_atof(split[2]);
+	normal.z = ft_atof(split[3]);
+	obj->normals[index] = normal; // Use the local index
+	free_split(split);
 }
 
-static bool check_valid(t_obj *obj)
+static void	parse_uv(char *line, t_obj *obj, int index)
 {
-    if ((obj->rot_x < -360 || obj->rot_x > 360)
-        || (obj->rot_y < -360 || obj->rot_y > 360)
-        || (obj->rot_z < -360 || obj->rot_z > 360)
-        || (obj->scale <= 0)
-        || (obj->roughness < 0 || obj->roughness > 1)
-        || (obj->reflect < 0 || obj->reflect > 1)
-        || (obj->col.r < 0 || obj->col.r > 255)
-        || (obj->col.g < 0 || obj->col.g > 255)
-        || (obj->col.b < 0 || obj->col.b > 255))
-        return (printlog(WARNING, "Invalid obj object parameters"), false);
-    return (true);
+	t_uv	uv;
+	char	**split;
+
+	split = ft_split(line, ' ');
+	uv.u = ft_atof(split[1]);
+	uv.v = ft_atof(split[2]);
+	obj->uvs[index] = uv; // Use the local index
+	free_split(split);
 }
 
-static void add_obj(t_assets *assets, t_obj *new_obj)
+static void	parse_face(char *line, t_obj *obj, int index)
 {
-    t_asset_node *new_node;
-    t_asset_node *current;
+	t_face	face;
+	char	**split;
 
-    if (!check_valid(new_obj))
-        return;
-    new_node = gc_malloc(sizeof(t_asset_node));
-    if (!new_node)
-        fatal_error(ERR_MEMORY, NULL);
-    new_node->asset_struct = new_obj;
-    new_node->type = AST_OBJ;
-    new_node->next = NULL;
-
-    if (assets->head == NULL)
-        assets->head = new_node;
-    else
-    {
-        current = assets->head;
-        while (current->next)
-            current = current->next;
-        current->next = new_node;
-    }
-    assets->size++;
-    assets->obj_cnt++;
-    printlog(LOG, "OBJ object setup successful.");
+	split = ft_split(line, ' ');
+	for (int i = 0; i < 3; i++)
+	{
+		char	**face_data = ft_split(split[i + 1], '/');
+		if (get_number_of_split_elements(face_data) == 3)
+		{
+			face.v[i] = ft_atoi(face_data[0]) - 1;
+			face.vt[i] = ft_atoi(face_data[1]) - 1;
+			face.vn[i] = ft_atoi(face_data[2]) - 1;
+			gc_free(face_data);
+		}
+	}
+	obj->faces[index] = face; // Use the local index
+	free_split(split);
 }
 
-int parse_obj(t_scene_data *data, char **param)
+static void	parse_obj_data(t_obj *obj, char *filename)
 {
-    t_obj *new_obj;
+	int		fd;
+	char	*line;
+	int		vertex_index = 0;
+	int		normal_index = 0;
+	int		uv_index = 0;
+	int		face_index = 0;
 
-    if (get_number_of_split_elements(param) < 6 || get_number_of_split_elements(param) > 8)
-        return (printlog(WARNING, "Invalid obj configuration."), 0);
-    if (get_number_of_splits(param[2], ',') != 3)
-        return (printlog(WARNING, "Invalid obj object position."), 0);
-    if (get_number_of_splits(param[3], ',') != 3)
-        return (printlog(WARNING, "Invalid obj object rotation."), 0);
-    if (get_number_of_splits(param[5], ',') != 3)
-        return (printlog(WARNING, "Invalid obj color."), 0);
+	obj->vertices = NULL;
+	obj->normals = NULL;
+	obj->uvs = NULL;
+	obj->faces = NULL;
+	obj->num_vertices = 0;
+	obj->num_normals = 0;
+	obj->num_uvs = 0;
+	obj->num_faces = 0;
 
-    // Try to open file first to validate it exists
-    int fd = open(param[1], O_RDONLY);
-    if (fd < 0)
-        return (printlog(WARNING, "Invalid obj file path."), 0);
-    close(fd);
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		fatal_error(ERR_OBJFILE, NULL);
+	count_alloc_elements(obj, fd);
+	close(fd);
 
-    new_obj = allocate_obj_data(param[1]);
-    if (!new_obj)
-        fatal_error(ERR_MEMORY, NULL);
-        
-    parse_obj_file(new_obj, param[1]);
-    set_params(new_obj, param);
-    add_obj(data->assets, new_obj);
-    return (1);
+	// Reopen the file for the second pass
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+		fatal_error(ERR_OBJFILE, NULL);
+
+	while ((line = read_line(fd)))
+	{
+		if (line == NULL)
+			continue;
+		if (ft_strncmp(line, "v ", 2) == 0)
+		{
+			parse_vertex(line, obj, vertex_index);
+			vertex_index++;
+		}
+		else if (ft_strncmp(line, "vn ", 3) == 0)
+		{
+			parse_normal(line, obj, normal_index);
+			normal_index++;
+		}
+		else if (ft_strncmp(line, "vt ", 3) == 0)
+		{
+			parse_uv(line, obj, uv_index);
+			uv_index++;
+		}
+		else if (ft_strncmp(line, "f ", 2) == 0)
+		{
+			parse_face(line, obj, face_index);
+			face_index++;
+		}
+		gc_free(line);
+	}
+	close(fd);
+}
+
+static void	set_params(t_obj *obj, char **param)
+{
+	obj->roughness = DEFAULT_ROUGHNESS;
+	obj->reflect = DEFAULT_REFLECT;
+	parse_obj_data(obj, param[1]);
+	obj->pos_x = ft_atof(get_split_param(param[2], 0));
+	obj->pos_y = ft_atof(get_split_param(param[2], 1));
+	obj->pos_z = ft_atof(get_split_param(param[2], 2));
+	obj->vec_x = ft_atof(get_split_param(param[3], 0));
+	obj->vec_y = ft_atof(get_split_param(param[3], 1));
+	obj->vec_z = ft_atof(get_split_param(param[3], 2));
+	obj->scale = ft_atof(param[4]);
+	obj->col.r = ft_atoi(get_split_param(param[5], 0));
+	obj->col.g = ft_atoi(get_split_param(param[5], 1));
+	obj->col.b = ft_atoi(get_split_param(param[5], 2));
+	if (get_number_of_split_elements(param) >= 7)
+		obj->roughness = ft_atof(param[6]);
+	if (get_number_of_split_elements(param) >= 8)
+		obj->reflect = ft_atof(param[7]);
+}
+
+static void	add_obj(t_assets *assets, t_obj *new_obj)
+{
+	t_asset_node	*new_node;
+	t_asset_node	*current;
+
+	if (!check_valid(new_obj))
+		return ;
+	new_node = gc_malloc(sizeof(t_asset_node));
+	if (!new_node)
+		fatal_error(ERR_MEMORY, NULL);
+	new_node->asset_struct = new_obj;
+	new_node->type = AST_OBJ;
+	new_node->next = NULL;
+	if (assets->head == NULL)
+		assets->head = new_node;
+	else
+	{
+		current = assets->head;
+		while (current->next)
+			current = current->next;
+		current->next = new_node;
+	}
+	assets->size++;
+	assets->obj_cnt++;
+	printlog(LOG, "Obj setup successful.");
+}
+
+int	parse_obj(t_scene_data *data, char **param)
+{
+	t_obj	*new_obj;
+
+	if (get_number_of_split_elements(param) < 6
+		|| get_number_of_split_elements(param) > 8)
+		return (printlog(WARNING, "Invalid .obj configuration"), 0);
+	if (access(param[1], F_OK) == -1)
+		return (printlog(WARNING, "Invalid .obj asset file."), 0);
+	if (get_number_of_splits(param[2], ',') != 3)
+		return (printlog(WARNING, "Invalid .obj asset position."), 0);
+	if (get_number_of_splits(param[3], ',') != 3)
+		return (printlog(WARNING, "Invalid .obj asset vector."), 0);
+	if (get_number_of_splits(param[5], ',') != 3)
+		return (printlog(WARNING, "Invalid .obj color."), 0);
+	new_obj = gc_malloc(sizeof(t_obj));
+	if (!new_obj)
+		fatal_error(ERR_MEMORY, NULL);
+	set_params(new_obj, param);
+	add_obj(data->assets, new_obj);
+	return (1);
 }

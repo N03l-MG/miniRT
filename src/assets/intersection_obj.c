@@ -8,9 +8,9 @@ static t_vector transform_point(t_vector p, t_obj *obj)
     p.z -= obj->pos_z;
     
     // Then apply inverse rotation
-    float rx = -obj->rot_x * M_PI / 180.0f;
-    float ry = -obj->rot_y * M_PI / 180.0f;
-    float rz = -obj->rot_z * M_PI / 180.0f;
+    float rx = -obj->vec_x * M_PI / 180.0f;
+    float ry = -obj->vec_y * M_PI / 180.0f;
+    float rz = -obj->vec_z * M_PI / 180.0f;
     p = apply_rotation(p, rx, ry, rz);
 
     // Finally apply inverse scale
@@ -63,9 +63,9 @@ bool obj_hit(t_obj *obj, t_ray ray, double *t)
     ray.origin = transform_point(ray.origin, obj);
     
     // Transform ray direction with rotation and scale
-    float rx = -obj->rot_x * M_PI / 180.0f;
-    float ry = -obj->rot_y * M_PI / 180.0f;
-    float rz = -obj->rot_z * M_PI / 180.0f;
+    float rx = -obj->vec_x * M_PI / 180.0f;
+    float ry = -obj->vec_y * M_PI / 180.0f;
+    float rz = -obj->vec_z * M_PI / 180.0f;
     ray.direction = apply_rotation(ray.direction, rx, ry, rz);
     
     if (obj->scale != 0.0f)
@@ -120,8 +120,8 @@ t_vector obj_normal(t_obj *obj, int face_index)
     }
 
     // Transform normal back to world space (only rotation needed for normals)
-    normal = apply_rotation(normal, obj->rot_x * M_PI / 180.0f,
-                          obj->rot_y * M_PI / 180.0f,
-                          obj->rot_z * M_PI / 180.0f);
+    normal = apply_rotation(normal, obj->vec_x * M_PI / 180.0f,
+                          obj->vec_y * M_PI / 180.0f,
+                          obj->vec_z * M_PI / 180.0f);
     return vec_normalize(normal);
 }

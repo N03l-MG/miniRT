@@ -84,7 +84,7 @@ int	parse_plane(t_scene_data *data, char **param)
 	t_plane	*new_plane;
 
 	if (get_number_of_split_elements(param) < 5
-		&& get_number_of_split_elements(param) > 6)
+		|| get_number_of_split_elements(param) > 6)
 		return (printlog(WARNING, "Invalid plane configuration."), 0);
 	if (get_number_of_splits(param[1], ',') != 3)
 		return (printlog(WARNING, "Invalid plane object position."), 0);

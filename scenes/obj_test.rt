@@ -1,7 +1,7 @@
-#ASST FILEPATH     POSITION    ROTATION    LUM/FOV  D  H  COLOR        ROUGH REFLCT
-C                  0,2,-5      0,-0.2,1    70
-A                                          0.2            250,255,240
-L                  0,5,0                   0.9            255,255,255
+#ASST FILEPATH     POSITION  ROTATION  LUM/FOV/SCL DIA HGT COLOR        ROUGH REFLCT
+C                  0,2,-5    0,-0.2,1  70
+A                                      0.15                250,255,240
+L                  0,20,0              0.9                 255,255,250
 
-obj   ./test.obj   0,0,0       0,0,0       1              200,200,200  0.3   0.1
-pl                 0,-1,0      0,1,0                      100,100,100  0.5   0.1
+obj   cube.obj     0,0,0     1,0,0     1.0                 255,0,0      0.3   0
+pl                 0,-1,0    0,1,0                         210,210,210  0.2   0.15

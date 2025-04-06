@@ -26,7 +26,7 @@ else
 endif
 
 FLAGS = -Wall -Wextra -Werror -flto -Ofast -march=native -MMD -MP -DQUALITY=$(QUALITY_VAL) $(addprefix -I, $(INCLUDES))
-LDFLAGS = -flto #-fsanitize=address
+LDFLAGS = -flto
 LIBFT = ./libft/libft.a
 MLX = ./MLX42/build/libmlx42.a
 # Colors

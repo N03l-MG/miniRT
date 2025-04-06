@@ -80,7 +80,7 @@ int	parse_sphere(t_scene_data *data, char **param)
 	t_sphere	*new_sphere;
 
 	if (get_number_of_split_elements(param) < 5
-		&& get_number_of_split_elements(param) > 6)
+		|| get_number_of_split_elements(param) > 6)
 		return (printlog(WARNING, "Invalid sphere configuration."), 0);
 	if (get_number_of_splits(param[1], ',') != 3)
 		return (printlog(WARNING, "Invalid sphere object position."), 0);
