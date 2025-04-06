@@ -52,6 +52,8 @@ static void	call_element(t_scene_data *data, char *line)
 		parse_cylinder(data, param);
 	else if (!ft_strcmp(param[0], "pl"))
 		parse_plane(data, param);
+	else if (!ft_strcmp(param[0], "obj"))
+		parse_obj(data, param);
 	else
 		error(ERR_UNKNOWN, param[0]);
 	free_split(param);
@@ -68,6 +70,7 @@ static void	scene_init(t_scene_data *data)
 	data->assets->sphere_cnt = 0;
 	data->assets->plane_cnt = 0;
 	data->assets->cylinder_cnt = 0;
+	data->assets->obj_cnt = 0;
 }
 
 static void	pass_color_to_parent(t_assets *assets)

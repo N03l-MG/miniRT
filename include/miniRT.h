@@ -57,6 +57,7 @@ int			create_dark_light(t_scene_data *data);
 int			parse_sphere(t_scene_data *data, char **param);
 int			parse_plane(t_scene_data *data, char **param);
 int			parse_cylinder(t_scene_data *data, char **param);
+int			parse_obj(t_scene_data *data, char **param);
 void		assign_properties(t_asset_node *current, void *asset, int type);
 void		free_split(char **splt);
 char		*get_split_param(char *str, int i);
@@ -105,6 +106,8 @@ t_vector	sphere_normal(t_sphere *sphere, t_vector point);
 bool		cylinder_hit(t_cylinder *cyl, t_ray ray, double *t);
 bool		intersect_caps(t_cylinder *cyl, t_ray ray, double *t);
 t_vector	cylinder_normal(t_cylinder *cyl, t_vector point);
+bool		obj_hit(t_obj *obj, t_ray ray, double *t);
+t_vector 	obj_normal(t_obj *obj, int face_index);
 
 //	Logging
 void		printlog(t_log_type log_type, char *message);

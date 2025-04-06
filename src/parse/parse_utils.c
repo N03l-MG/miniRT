@@ -95,4 +95,10 @@ void	assign_properties(t_asset_node *current, void *asset, int type)
 		current->roughness = ((t_cylinder *)asset)->roughness;
 		current->reflect = ((t_cylinder *)asset)->reflect;
 	}
+	else if (type == AST_OBJ)
+	{
+		current->col = ((t_obj *)asset)->col;
+		current->roughness = ((t_obj *)asset)->roughness;
+		current->reflect = ((t_obj *)asset)->reflect;
+	}
 }

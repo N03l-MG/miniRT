@@ -35,11 +35,13 @@ t_vector	surface_normal(void *obj, t_vector point, t_asset_type type)
 {
 	if (type == AST_PLANE)
 		return (plane_normal((t_plane *)obj));
-	if (type == AST_SPHERE)
+	else if (type == AST_SPHERE)
 		return (sphere_normal((t_sphere *)obj, point));
-	if (type == AST_CYLINDER)
+	else if (type == AST_CYLINDER)
 		return (cylinder_normal((t_cylinder *)obj, point));
-	return (vec_new(0, 0, 0));
+	else if (type == AST_OBJ)
+		return (obj_normal((t_obj *)obj, ((t_obj *)obj)->hit_face));
+	return ((t_vector){0, 0, 0});
 }
 
 bool	is_occluded(t_scene_data *data, t_ray shadow_ray, float light_distance)
@@ -60,6 +62,10 @@ bool	is_occluded(t_scene_data *data, t_ray shadow_ray, float light_distance)
 			return (true);
 		else if (node->type == AST_CYLINDER
 			&& (cylinder_hit((t_cylinder *)node->asset_struct, shadow_ray, &t)
+				&& t > 0.001f && t < light_distance))
+			return (true);
+		else if (node->type == AST_OBJ
+			&& (obj_hit((t_obj *)node->asset_struct, shadow_ray, &t)
 				&& t > 0.001f && t < light_distance))
 			return (true);
 		node = node->next;

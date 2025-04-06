@@ -49,3 +49,47 @@ t_vector	vec_random(float min, float max)
 		.z = rand_range(min, max)
 	});
 }
+
+t_vector    rotate_x(t_vector v, float angle)
+{
+    t_vector result;
+    float cos_t = cos(angle);
+    float sin_t = sin(angle);
+
+    result.x = v.x;
+    result.y = v.y * cos_t - v.z * sin_t;
+    result.z = v.y * sin_t + v.z * cos_t;
+    return (result);
+}
+
+t_vector    rotate_y(t_vector v, float angle)
+{
+    t_vector result;
+    float cos_t = cos(angle);
+    float sin_t = sin(angle);
+
+    result.x = v.x * cos_t + v.z * sin_t;
+    result.y = v.y;
+    result.z = -v.x * sin_t + v.z * cos_t;
+    return (result);
+}
+
+t_vector    rotate_z(t_vector v, float angle)
+{
+    t_vector result;
+    float cos_t = cos(angle);
+    float sin_t = sin(angle);
+
+    result.x = v.x * cos_t - v.y * sin_t;
+    result.y = v.x * sin_t + v.y * cos_t;
+    result.z = v.z;
+    return (result);
+}
+
+t_vector    apply_rotation(t_vector v, float rx, float ry, float rz)
+{
+    v = rotate_x(v, rx);
+    v = rotate_y(v, ry);
+    v = rotate_z(v, rz);
+    return (v);
+}

@@ -15,6 +15,7 @@
 
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "assets.h"
+# include "obj.h"
 # include "color.h"
 
 //	Enums
@@ -44,6 +45,7 @@ typedef enum e_asset_type
 	AST_PLANE,
 	AST_SPHERE,
 	AST_CYLINDER,
+	AST_OBJ,
 	NO_TYPE
 }	t_asset_type;
 
@@ -75,6 +77,7 @@ typedef struct s_assets
 	size_t			sphere_cnt;
 	size_t			plane_cnt;
 	size_t			cylinder_cnt;
+	size_t			obj_cnt;
 }	t_assets;
 
 typedef struct s_scene_data

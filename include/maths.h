@@ -66,4 +66,10 @@ float		fast_inverse_sqrt(float number);
 bool		solve_quadratic(float a, float b, float c, t_quad *t);
 int			ft_rand(void);
 
+// Matrix operations for rotations
+t_vector    rotate_x(t_vector v, float angle);
+t_vector    rotate_y(t_vector v, float angle);
+t_vector    rotate_z(t_vector v, float angle);
+t_vector    apply_rotation(t_vector v, float rx, float ry, float rz);
+
 #endif

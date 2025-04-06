@@ -30,7 +30,9 @@ static t_asset_node	*find_closest_intersection(t_scene_data *data, t_ray ray,
 				|| (node->type == AST_SPHERE
 					&& sphere_hit((t_sphere *)node->asset_struct, ray, &t))
 				|| (node->type == AST_CYLINDER
-					&& cylinder_hit((t_cylinder *)node->asset_struct, ray, &t)))
+					&& cylinder_hit((t_cylinder *)node->asset_struct, ray, &t))
+				|| (node->type == AST_OBJ
+					&& obj_hit((t_obj *)node->asset_struct, ray, &t)))
 			&& (t < *closest_t))
 		{
 			*closest_t = t;

@@ -1,4 +1,4 @@
-#AST  POSITION        ROTATION    LUM/FOV RAD HGT  COLOR       ROUGH REFLECT
+#AST  POSITION        ROTATION    LUM/FOV D   H    COLOR       ROUGH REFLCT
 A                                 0.1              240,255,255
 C    -50,40.5,50      1,-0.25,-1  62
 L    -5,10,60                     0.84             255,196,240
