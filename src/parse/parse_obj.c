@@ -105,18 +105,34 @@ static void	parse_face(char *line, t_obj *obj, int index)
 	char	**split;
 
 	split = ft_split(line, ' ');
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 3; i++) // Ensure only triangles are processed
 	{
 		char	**face_data = ft_split(split[i + 1], '/');
-		if (get_number_of_split_elements(face_data) == 3)
-		{
+		int		num_elements = get_number_of_split_elements(face_data);
+
+		if (num_elements >= 1) // At least vertex index is present
 			face.v[i] = ft_atoi(face_data[0]) - 1;
+		else
+			face.v[i] = -1;
+		if (num_elements >= 2 && ft_strlen(face_data[1]) > 0) // Texture index
 			face.vt[i] = ft_atoi(face_data[1]) - 1;
+		else
+			face.vt[i] = -1;
+		if (num_elements == 3 && ft_strlen(face_data[2]) > 0) // Normal index
 			face.vn[i] = ft_atoi(face_data[2]) - 1;
-			gc_free(face_data);
+		else
+			face.vn[i] = -1;
+		// Validate vertex index
+		if (face.v[i] < 0 || face.v[i] >= obj->num_vertices)
+		{
+			printlog(WARNING, "Invalid vertex index in .obj file");
+			free_split(face_data);
+			free_split(split);
+			return;
 		}
+		free_split(face_data);
 	}
-	obj->faces[index] = face; // Use the local index
+	obj->faces[index] = face; // Assign parsed face
 	free_split(split);
 }
 
