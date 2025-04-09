@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmonzon <nmonzon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kixik   <github.com/kixikCodes>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 10:55:15 by jgraf             #+#    #+#             */
-/*   Updated: 2025/03/31 13:05:19 by nmonzon          ###   ########.fr       */
+/*   Updated: 2025/03/31 13:05:19 by kixik            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,17 @@ t_light	*get_scene_light(t_scene_data *data)
 	return (NULL);
 }
 
-t_vector	surface_normal(void *obj, t_vector point, t_asset_type type)
+t_vector surface_normal(void *obj, t_vector point, t_asset_type type)
 {
-	if (type == AST_PLANE)
-		return (plane_normal((t_plane *)obj));
-	else if (type == AST_SPHERE)
-		return (sphere_normal((t_sphere *)obj, point));
-	else if (type == AST_CYLINDER)
-		return (cylinder_normal((t_cylinder *)obj, point));
-	else if (type == AST_OBJ)
-		return (obj_normal((t_obj *)obj, ((t_obj *)obj)->hit_face));
-	return ((t_vector){0, 0, 0});
+    if (type == AST_PLANE)
+        return plane_normal((t_plane *)obj);
+    else if (type == AST_SPHERE)
+        return sphere_normal((t_sphere *)obj, point);
+    else if (type == AST_CYLINDER)
+        return cylinder_normal((t_cylinder *)obj, point);
+    else if (type == AST_OBJ)
+        return obj_normal((t_obj *)obj, ((t_obj *)obj)->hit_face);
+    return (t_vector){0, 0, 0};
 }
 
 bool	is_occluded(t_scene_data *data, t_ray shadow_ray, float light_distance)

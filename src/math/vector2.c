@@ -86,10 +86,13 @@ t_vector    rotate_z(t_vector v, float angle)
     return (result);
 }
 
-t_vector    apply_rotation(t_vector v, float rx, float ry, float rz)
+t_vector apply_rotation(t_vector v, float rx, float ry, float rz)
 {
+    // Debug: Print rotation values
+    //printf("Applying rotation: rx=%f, ry=%f, rz=%f\n", rx, ry, rz);
+
     v = rotate_x(v, rx);
     v = rotate_y(v, ry);
     v = rotate_z(v, rz);
-    return (v);
+    return v;
 }
